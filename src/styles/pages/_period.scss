@@ -1,0 +1,77 @@
+.period {
+  margin: 5rem 8rem;
+  font-size: 1.4rem;
+  box-shadow: 5px 4px 5px rgb(32, 31, 31);
+  border-radius: 1rem;
+
+  &__header {
+    background-color: $color-light-green;
+    height: 4rem;
+    padding: 2rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__title {
+    margin-right: auto;
+  }
+
+  &__date {
+    text-transform: uppercase;
+  }
+
+  &__table {
+    background-color: $color-dark-gray;
+    width: 100%;
+    padding: 1.5rem;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  &__theader {
+    padding-bottom: 2rem;
+    text-align: left;
+  }
+
+  tbody tr:hover {
+    background-color: rgb(70, 70, 70);
+  }
+
+  tbody tr {
+    vertical-align: middle;
+  }
+
+  &__trow {
+    vertical-align: middle;
+  }
+
+  &__trow td {
+    padding: 1rem 0;
+    vertical-align: middle;
+  }
+
+  &__tinput {
+    background: none;
+    border: none;
+    outline: none;
+    color: $color-off-white;
+    width: 8rem;
+
+    &:focus,
+    &:active {
+      padding-left: 2px;
+      border-radius: 0.5rem;
+      border: 2px solid $color-light-green;
+    }
+
+    &:hover:not(:focus) {
+      padding-left: 2px;
+      border-radius: 0.5rem;
+      border: 1.5px solid #369172;
+    }
+  }
+}

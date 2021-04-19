@@ -1,0 +1,28 @@
+.header {
+  background-color: $color-dark-gray;
+  height: 4.5rem;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &__title {
+    color: $color-light-green;
+    font-size: 2.5rem;
+    margin: 2rem;
+  }
+
+  &__btn {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    height: 100%;
+    padding: 1.5rem 1rem;
+    transition: 0.4s;
+
+    &:hover {
+      background-color: $color-light-green;
+    }
+  }
+}
