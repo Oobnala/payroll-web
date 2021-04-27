@@ -1,150 +1,154 @@
 {
-    "rows": [
-        {        
-            "firstName": "Khamphay",
-            "lastName": "Mathavongsy",
-            "payRate": "$13.00",
-            "kitchenRate": "$0",
-            "kitchenDays": "0",
-            "kitchenHours": "00:00",
-            "regularHours": "80:00",
-            "sickHours": "00:00",
-            "totalRoundedNearest": "80:00",
-            "totalRoundedUp": "80:00",
-            "tips": "$0",
-            "history": [
-                {
-                  "period": "02/01/2021 - 02/15/2021",
-                  "kitchenHours": "00:00",
-                  "regularHours": "34:00",
-                  "totalRoundedUp": "34:00",
-                  "totalRoundedNearest": "34:00",
-                  "tips": "$400"
-                },
-                {
-                  "period": "01/15/2021 - 01/31/2021",
-                  "kitchenHours": "00:00",
-                  "regularHours": "34:00",
-                  "totalRoundedUp": "34:00",
-                  "totalRoundedNearest": "34:00",
-                  "tips": "$400"
-                }
-              ]
+  "rows": [
+    {
+      "id": 1,
+      "firstName": "Khamphay",
+      "lastName": "Mathavongsy",
+      "payRate": "$13.00",
+      "kitchenRate": "$0",
+      "kitchenDays": "0",
+      "kitchenHours": "00:00",
+      "regularHours": "80:00",
+      "sickHours": "00:00",
+      "totalRoundedNearest": "80:00",
+      "totalRoundedUp": "80:00",
+      "tips": "$0",
+      "history": [
+        {
+          "period": "02/01/2021 - 02/15/2021",
+          "kitchenHours": "00:00",
+          "regularHours": "34:00",
+          "totalRoundedUp": "34:00",
+          "totalRoundedNearest": "34:00",
+          "tips": "$400"
         },
-        {        
-            "firstName": "Monty",
-            "lastName": "Saengsavang",
-            "payRate": "$20.00",
-            "kitchenRate": "$0",
-            "kitchenDays": "0",
-            "kitchenHours": "00:00",
-            "regularHours": "80:00",
-            "sickHours": "00:00",
-            "totalRoundedNearest": "80:00",
-            "totalRoundedUp": "80:00",
-            "tips": "$0",
-            "history": [
-                {
-                  "period": "02/01/2021 - 02/15/2021",
-                  "kitchenHours": "00:00",
-                  "regularHours": "34:00",
-                  "totalRoundedUp": "34:00",
-                  "totalRoundedNearest": "34:00",
-                  "tips": "$400"
-                },
-                {
-                  "period": "01/15/2021 - 01/31/2021",
-                  "kitchenHours": "00:00",
-                  "regularHours": "34:00",
-                  "totalRoundedUp": "34:00",
-                  "totalRoundedNearest": "34:00",
-                  "tips": "$400"
-                }
-              ]
-        },
-        {        
-            "firstName": "Daravanh",
-            "lastName": "Saengsavang",
-            "payRate": "$25.00",
-            "kitchenRate": "$0",
-            "kitchenDays": "0",
-            "kitchenHours": "00:00",
-            "regularHours": "80:00",
-            "sickHours": "00:00",
-            "totalRoundedNearest": "80:00",
-            "totalRoundedUp": "80:00",
-            "tips": "$0",
-            "history": [
-                {
-                  "period": "02/01/2021 - 02/15/2021",
-                  "kitchenHours": "00:00",
-                  "regularHours": "34:00",
-                  "totalRoundedUp": "34:00",
-                  "totalRoundedNearest": "34:00",
-                  "tips": "$400"
-                },
-                {
-                  "period": "01/15/2021 - 01/31/2021",
-                  "kitchenHours": "00:00",
-                  "regularHours": "34:00",
-                  "totalRoundedUp": "34:00",
-                  "totalRoundedNearest": "34:00",
-                  "tips": "$400"
-                }
-              ]
-        },
-        {        
-            "firstName": "Janthajone",
-            "lastName": "Thammakhoth",
-            "payRate": "$15.00",
-            "kitchenRate": "$0",
-            "kitchenDays": "0",
-            "kitchenHours": "00:00",
-            "regularHours": "80:00",
-            "sickHours": "00:00",
-            "totalRoundedNearest": "80:00",
-            "totalRoundedUp": "80:00",
-            "tips": "$0",
-            "history": [
-                {
-                  "period": "02/01/2021 - 02/15/2021",
-                  "kitchenHours": "00:00",
-                  "regularHours": "34:00",
-                  "totalRoundedUp": "34:00",
-                  "totalRoundedNearest": "34:00",
-                  "tips": "$400"
-                },
-                {
-                  "period": "01/15/2021 - 01/31/2021",
-                  "kitchenHours": "00:00",
-                  "regularHours": "34:00",
-                  "totalRoundedUp": "34:00",
-                  "totalRoundedNearest": "34:00",
-                  "tips": "$400"
-                }
-              ]
+        {
+          "period": "01/15/2021 - 01/31/2021",
+          "kitchenHours": "00:00",
+          "regularHours": "34:00",
+          "totalRoundedUp": "34:00",
+          "totalRoundedNearest": "34:00",
+          "tips": "$400"
         }
-    ],
-    "headers": [
-        "First Name",
-        "Last Name",
-        "Pay Rate",
-        "Kitchen Rate",
-        "Kitchen Hours",
-        "Kitchen Days",
-        "Regular Hours",
-        "Sick Hours",
-        "Total Rounded Nearest",
-        "Total Rounded Up",
-        "Tips"
-      ],
+      ]
+    },
+    {
+      "id": 2,
+      "firstName": "Monty",
+      "lastName": "Saengsavang",
+      "payRate": "$20.00",
+      "kitchenRate": "$0",
+      "kitchenDays": "0",
+      "kitchenHours": "00:00",
+      "regularHours": "80:00",
+      "sickHours": "00:00",
+      "totalRoundedNearest": "80:00",
+      "totalRoundedUp": "80:00",
+      "tips": "$0",
+      "history": [
+        {
+          "period": "02/01/2021 - 02/15/2021",
+          "kitchenHours": "00:00",
+          "regularHours": "34:00",
+          "totalRoundedUp": "34:00",
+          "totalRoundedNearest": "34:00",
+          "tips": "$400"
+        },
+        {
+          "period": "01/15/2021 - 01/31/2021",
+          "kitchenHours": "00:00",
+          "regularHours": "34:00",
+          "totalRoundedUp": "34:00",
+          "totalRoundedNearest": "34:00",
+          "tips": "$400"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "firstName": "Daravanh",
+      "lastName": "Saengsavang",
+      "payRate": "$25.00",
+      "kitchenRate": "$0",
+      "kitchenDays": "0",
+      "kitchenHours": "00:00",
+      "regularHours": "80:00",
+      "sickHours": "00:00",
+      "totalRoundedNearest": "80:00",
+      "totalRoundedUp": "80:00",
+      "tips": "$0",
+      "history": [
+        {
+          "period": "02/01/2021 - 02/15/2021",
+          "kitchenHours": "00:00",
+          "regularHours": "34:00",
+          "totalRoundedUp": "34:00",
+          "totalRoundedNearest": "34:00",
+          "tips": "$400"
+        },
+        {
+          "period": "01/15/2021 - 01/31/2021",
+          "kitchenHours": "00:00",
+          "regularHours": "34:00",
+          "totalRoundedUp": "34:00",
+          "totalRoundedNearest": "34:00",
+          "tips": "$400"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "firstName": "Janthajone",
+      "lastName": "Thammakhoth",
+      "payRate": "$15.00",
+      "kitchenRate": "$0",
+      "kitchenDays": "0",
+      "kitchenHours": "00:00",
+      "regularHours": "80:00",
+      "sickHours": "00:00",
+      "totalRoundedNearest": "80:00",
+      "totalRoundedUp": "80:00",
+      "tips": "$0",
+      "history": [
+        {
+          "period": "02/01/2021 - 02/15/2021",
+          "kitchenHours": "00:00",
+          "regularHours": "34:00",
+          "totalRoundedUp": "34:00",
+          "totalRoundedNearest": "34:00",
+          "tips": "$400"
+        },
+        {
+          "period": "01/15/2021 - 01/31/2021",
+          "kitchenHours": "00:00",
+          "regularHours": "34:00",
+          "totalRoundedUp": "34:00",
+          "totalRoundedNearest": "34:00",
+          "tips": "$400"
+        }
+      ]
+    }
+  ],
+  "headers": [
+    "First Name",
+    "Last Name",
+    "Pay Rate",
+    "Kitchen Rate",
+    "Kitchen Hours",
+    "Kitchen Days",
+    "Regular Hours",
+    "Sick Hours",
+    "Total Rounded Nearest",
+    "Total Rounded Up",
+    "Tips"
+  ],
 
-    "historyHeaders": [
-      "Period",
-      "Kitchen Hours",
-      "Regular Hours",
-      "Total Rounded Nearest",
-      "Total Rounded Up",
-      "Tips"
-    ]
+  "historyHeaders": [
+    "Period",
+    "Kitchen Hours",
+    "Regular Hours",
+    "Total Rounded Nearest",
+    "Total Rounded Up",
+    "Tips"
+  ]
 }
