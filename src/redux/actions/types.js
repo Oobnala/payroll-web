@@ -1,0 +1,1 @@
+export const GET_ALL_PAY_PERIODS = 'GET_ALL_PAY_PERIODS';

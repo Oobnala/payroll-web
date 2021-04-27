@@ -1,5 +1,5 @@
 .header {
-  background-color: $color-dark-gray;
+  background-color: $color-gray;
   height: 4.5rem;
 
   display: flex;
@@ -7,7 +7,7 @@
   align-items: center;
 
   &__title {
-    color: $color-light-green;
+    color: $color-off-white;
     font-size: 2.5rem;
     margin: 2rem;
   }
@@ -20,9 +20,18 @@
     height: 100%;
     padding: 1.5rem 1rem;
     transition: 0.4s;
+    margin: 0.2rem;
 
     &:hover {
-      background-color: $color-light-green;
+      background-color: $color-primary;
+    }
+
+    &--active {
+      background-color: $color-primary;
+    }
+
+    &--inactive {
+      background-color: transparent;
     }
   }
 }
