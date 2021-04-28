@@ -27,15 +27,20 @@ class CurrentPeriod extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      periodIndex: this.props.dates.length - 1,
-      employees: this.props.periods[
-        this.props.dates[this.props.dates.length - 1]
-      ],
+      periodIndex: 0,
+      employees: [],
     };
   }
 
   componentDidMount() {
-    this.props.getPayPeriods();
+    this.props.getPayPeriods().then(() => {
+      this.setState({
+        periodIndex: this.props.dates.length - 1,
+        employees: this.props.periods[
+          this.props.dates[this.props.dates.length - 1]
+        ],
+      });
+    });
   }
 
   renderEndDate(date) {
@@ -51,7 +56,6 @@ class CurrentPeriod extends Component {
     selectedDate = new Date(
       selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000
     );
-    console.log(selectedDate);
     let month = selectedDate.getMonth() + 1;
     let day = selectedDate.getDate();
     let year = selectedDate.getFullYear();
@@ -62,7 +66,6 @@ class CurrentPeriod extends Component {
     if (this.state.periodIndex > 0) {
       let index = this.state.periodIndex - 1;
       let period = this.props.dates[index];
-      console.log(period);
       this.setState({
         periodIndex: index,
         employees: this.props.periods[period],
@@ -74,7 +77,6 @@ class CurrentPeriod extends Component {
     if (this.state.periodIndex < this.props.dates.length - 1) {
       let index = this.state.periodIndex + 1;
       let period = this.props.dates[index];
-      console.log(period);
       this.setState({
         periodIndex: index,
         employees: this.props.periods[period],
@@ -97,6 +99,7 @@ class CurrentPeriod extends Component {
       'Tips',
       'History',
     ];
+    console.log(this.state.employees);
     return (
       <thead>
         <tr>
@@ -112,66 +115,68 @@ class CurrentPeriod extends Component {
 
   renderTableRows() {
     let employees = this.state.employees;
-    return (
-      <tbody>
-        {employees.map((employee, index) => (
-          <tr key={index} className="period__trow">
-            <td>{employee.firstName}</td>
-            <td>{employee.lastName}</td>
-            <td>
-              <input
-                className="period__tinput"
-                type="text"
-                defaultValue={employee.hourlyRate}
-              />
-            </td>
-            <td>
-              <input
-                className="period__tinput"
-                type="text"
-                defaultValue={employee.kitchenDayRate}
-              />
-            </td>
-            <td>
-              <input
-                className="period__tinput"
-                type="text"
-                defaultValue={employee.kitchenDays}
-              />
-            </td>
-            <td>{employee.calculatedKitchenHours}</td>
-            <td>
-              <input
-                className="period__tinput"
-                type="text"
-                defaultValue={employee.serverHours}
-              />
-            </td>
-            <td>
-              <input
-                className="period__tinput"
-                type="text"
-                defaultValue={employee.sickHours}
-              />
-            </td>
-            <td>{employee.totalHours}</td>
-            <td>{employee.totalHoursRounded}</td>
-            <td>
-              <input
-                className="period__tinput"
-                type="text"
-                defaultValue={employee.tips}
-              />
-            </td>
-            <td>
-              <button className="period__history">
-                <FontAwesomeIcon icon={faHistory} />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    );
+    if (employees) {
+      return (
+        <tbody>
+          {employees.map((employee, index) => (
+            <tr key={index} className="period__trow">
+              <td>{employee.firstName}</td>
+              <td>{employee.lastName}</td>
+              <td>
+                <input
+                  className="period__tinput"
+                  type="text"
+                  defaultValue={employee.hourlyRate}
+                />
+              </td>
+              <td>
+                <input
+                  className="period__tinput"
+                  type="text"
+                  defaultValue={employee.kitchenDayRate}
+                />
+              </td>
+              <td>
+                <input
+                  className="period__tinput"
+                  type="text"
+                  defaultValue={employee.kitchenDays}
+                />
+              </td>
+              <td>{employee.calculatedKitchenHours}</td>
+              <td>
+                <input
+                  className="period__tinput"
+                  type="text"
+                  defaultValue={employee.serverHours}
+                />
+              </td>
+              <td>
+                <input
+                  className="period__tinput"
+                  type="text"
+                  defaultValue={employee.sickHours}
+                />
+              </td>
+              <td>{employee.totalHours}</td>
+              <td>{employee.totalHoursRounded}</td>
+              <td>
+                <input
+                  className="period__tinput"
+                  type="text"
+                  defaultValue={employee.tips}
+                />
+              </td>
+              <td>
+                <button className="period__history">
+                  <FontAwesomeIcon icon={faHistory} />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      );
+    }
   }
 
   render() {
