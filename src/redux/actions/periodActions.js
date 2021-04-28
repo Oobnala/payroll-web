@@ -5,8 +5,6 @@ export const getPayPeriods = () => async (dispatch) => {
   await server
     .get('pay/periods')
     .then((response) => {
-      console.log(response.data);
-
       dispatch({ type: GET_ALL_PAY_PERIODS, payload: response.data });
     })
     .catch((err) => {
