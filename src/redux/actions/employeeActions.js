@@ -33,3 +33,11 @@ export const editEmployee = (employeeProps) => async (dispatch) => {
       console.log(err);
     });
 };
+
+export const deleteEmployee = (id) => async (dispatch) => {
+  await server.delete('/remove/employee', {
+    params: {
+      id: id,
+    },
+  });
+};

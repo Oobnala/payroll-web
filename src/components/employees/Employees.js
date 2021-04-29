@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { remove } from 'lodash';
-import { getEmployees, addEmployee } from '../../redux/actions/employeeActions';
+import {
+  getEmployees,
+  addEmployee,
+  editEmployee,
+  deleteEmployee,
+} from '../../redux/actions/employeeActions';
 import EmployeeCard from './EmployeeCard';
 import EmployeeEdit from './EmployeeEdit';
 import {
@@ -10,6 +15,7 @@ import {
   faWindowClose,
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
+
 class Employees extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +24,7 @@ class Employees extends Component {
       employees: this.props.employees,
       activeCards: [],
       deleteModalActive: false,
+      deleteEmployeeId: -1,
     };
     this.edit = this.edit.bind(this);
     this.openModal = this.openModal.bind(this);
@@ -26,7 +33,14 @@ class Employees extends Component {
   }
 
   componentDidMount() {
-    this.props.getEmployees();
+    this.props.getEmployees().then(() => {
+      this.state = {
+        employees: this.props.employees,
+        activeCards: [],
+        deleteModalActive: false,
+        deleteEmployeeId: -1,
+      };
+    });
   }
 
   edit(index) {
@@ -45,17 +59,83 @@ class Employees extends Component {
 
     this.setState({
       activeCards: cards,
+      employees: this.props.employees,
     });
   }
 
-  confirmEdit(index) {
+  confirmEdit(updatedEmployee, index, isNewEmployee) {
     let cards = this.state.activeCards;
-    remove(cards, (activeIndex) => {
-      return index === activeIndex;
-    });
+    if (isNewEmployee) {
+      this.props.addEmployee(updatedEmployee).then(() => {
+        this.props.getEmployees().then(() => {
+          remove(cards, (activeIndex) => {
+            return index === activeIndex;
+          });
+          this.setState({
+            activeCards: cards,
+            employees: this.props.employees,
+          });
+        });
+      });
+    } else {
+      this.props.editEmployee(updatedEmployee).then(() => {
+        this.props.getEmployees().then(() => {
+          remove(cards, (activeIndex) => {
+            return index === activeIndex;
+          });
+          this.setState({
+            activeCards: cards,
+            employees: this.props.employees,
+          });
+        });
+      });
+    }
+  }
+
+  addEmployee() {
+    let newEmployee = {
+      firstName: '',
+      lastName: '',
+      hourlyRate: 0,
+      kitchenDayRate: 0,
+      isNew: true,
+    };
+
+    let updatedEmployees = this.state.employees;
+    updatedEmployees.push(newEmployee);
+
+    let active = this.state.activeCards;
+    active.push(updatedEmployees.length - 1);
 
     this.setState({
-      activeCards: cards,
+      employees: updatedEmployees,
+      activeCards: active,
+    });
+  }
+
+  confirmDelete(id) {
+    this.props.deleteEmployee(id).then(() => {
+      this.props.getEmployees().then(() => {
+        this.setState({
+          employees: this.props.employees,
+          deleteModalActive: false,
+          deleteEmployeeId: -1,
+        });
+      });
+    });
+  }
+
+  closeModal() {
+    this.setState({
+      deleteModalActive: false,
+      deleteEmployeeId: -1,
+    });
+  }
+
+  openModal(id) {
+    this.setState({
+      deleteModalActive: true,
+      deleteEmployeeId: id,
     });
   }
 
@@ -94,7 +174,7 @@ class Employees extends Component {
               <FontAwesomeIcon icon={faWindowClose} />
             </button>
             <button
-              onClick={() => this.confirmDelete()}
+              onClick={() => this.confirmDelete(this.state.deleteEmployeeId)}
               className="employee__btn employee__btn--confirm"
             >
               <FontAwesomeIcon icon={faCheck} />
@@ -105,55 +185,23 @@ class Employees extends Component {
     );
   }
 
-  addEmployee() {
-    let newEmployee = {
-      firstName: '',
-      lastName: '',
-      hourlyRate: 0,
-      kitchenDayRate: 0,
-    };
-
-    let updatedEmployees = this.state.employees;
-    updatedEmployees.push(newEmployee);
-
-    let active = this.state.activeCards;
-    active.push(updatedEmployees.length - 1);
-
-    this.setState({
-      employees: updatedEmployees,
-      activeCards: active,
-    });
-  }
-
-  confirmDelete(id) {
-    console.log('Deleted');
-    this.setState({
-      deleteModalActive: false,
-    });
-  }
-
-  closeModal() {
-    this.setState({
-      deleteModalActive: false,
-    });
-  }
-
-  openModal(id) {
-    this.setState({
-      deleteModalActive: true,
-    });
-  }
-
   render() {
     return (
       <div className="employees">
-        {this.renderCards()}
-        <button
-          className="employees__add-btn"
-          onClick={() => this.addEmployee()}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
+        {this.state.employees.length === 0 ? (
+          <div className="employees__load">Loading Employees...</div>
+        ) : (
+          <>
+            {this.renderCards()}
+            <button
+              className="employees__add-btn"
+              onClick={() => this.addEmployee()}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+          </>
+        )}
+
         {this.state.deleteModalActive && this.renderModal()}
       </div>
     );
@@ -164,6 +212,9 @@ const mapStateToProps = (state) => ({
   employees: state.employee.employees,
 });
 
-export default connect(mapStateToProps, { getEmployees, addEmployee })(
-  Employees
-);
+export default connect(mapStateToProps, {
+  getEmployees,
+  addEmployee,
+  editEmployee,
+  deleteEmployee,
+})(Employees);
