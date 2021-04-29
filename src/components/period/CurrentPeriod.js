@@ -99,7 +99,6 @@ class CurrentPeriod extends Component {
       'Tips',
       'History',
     ];
-    console.log(this.state.employees);
     return (
       <thead>
         <tr>

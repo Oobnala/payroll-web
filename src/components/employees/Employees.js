@@ -1,38 +1,46 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { remove } from 'lodash';
+import { getEmployees, addEmployee } from '../../redux/actions/employeeActions';
+import EmployeeCard from './EmployeeCard';
+import EmployeeEdit from './EmployeeEdit';
 import {
-  faEdit,
-  faHistory,
   faCheck,
   faWindowClose,
   faPlus,
-  faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import data from '../../data.json';
 class Employees extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      employees: this.props.employees,
       activeCards: [],
       deleteModalActive: false,
     };
+    this.edit = this.edit.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.cancelEdit = this.cancelEdit.bind(this);
+    this.confirmEdit = this.confirmEdit.bind(this);
   }
 
-  edit(id) {
+  componentDidMount() {
+    this.props.getEmployees();
+  }
+
+  edit(index) {
     let cards = this.state.activeCards;
-    cards.push(id);
+    cards.push(index);
     this.setState({
       activeCards: cards,
     });
   }
 
-  cancelEdit(id) {
+  cancelEdit(index) {
     let cards = this.state.activeCards;
-    remove(cards, (activeId) => {
-      console.log(activeId);
-      return id === activeId;
+    remove(cards, (activeIndex) => {
+      return index === activeIndex;
     });
 
     this.setState({
@@ -40,100 +48,38 @@ class Employees extends Component {
     });
   }
 
-  confirmEdit(id) {
+  confirmEdit(index) {
     let cards = this.state.activeCards;
-    remove(cards, (activeId) => {
-      return id === activeId;
+    remove(cards, (activeIndex) => {
+      return index === activeIndex;
     });
 
     this.setState({
       activeCards: cards,
     });
   }
-
-  addEmployee() {}
 
   renderCards() {
-    let employees = data.rows;
-    return employees.map((employee) =>
-      this.state.activeCards.includes(employee.id) ? (
-        <div className="employees__card" key={employee.id}>
-          <div className="employee__name">
-            <input
-              className="employee__name-input"
-              defaultValue={employee.firstName}
-              placeholder="First Name"
-            />
-            <input
-              className="employee__name-input"
-              defaultValue={employee.lastName}
-              placeholder="Last Name"
-            />
-          </div>
-          <div className="employee__rate employee__rate--hourly">
-            <h2>Hourly Rate</h2>
-            <input
-              className="employee__rate-input"
-              defaultValue={employee.payRate}
-            />
-          </div>
-          <div className="employee__rate employee__rate--kitchen">
-            <h2>Kitchen Rate</h2>
-            <input
-              className="employee__rate-input"
-              defaultValue={employee.kitchenRate}
-            />
-          </div>
-          <button
-            className="employee__btn employee__btn--edit"
-            onClick={() => this.cancelEdit(employee.id)}
-          >
-            <FontAwesomeIcon icon={faWindowClose} />
-          </button>
-          <button
-            className="employee__btn employee__btn--history"
-            onClick={() => this.confirmEdit(employee.id)}
-          >
-            <FontAwesomeIcon icon={faCheck} />
-          </button>
-        </div>
+    return this.state.employees.map((employee, index) =>
+      this.state.activeCards.includes(index) ? (
+        <EmployeeEdit
+          key={index}
+          index={index}
+          employee={employee}
+          confirmEdit={this.confirmEdit}
+          cancelEdit={this.cancelEdit}
+          openModal={this.openModal}
+        />
       ) : (
-        <div className="employees__card" key={employee.id}>
-          <div className="employee__name">
-            <h1>{employee.firstName}</h1>
-            <h1>{employee.lastName}</h1>
-          </div>
-          <div className="employee__rate employee__rate--hourly">
-            <h2>Hourly Rate</h2>
-            <p>{employee.payRate}</p>
-          </div>
-          <div className="employee__rate employee__rate--kitchen">
-            <h2>Kitchen Rate</h2>
-            <p>{employee.kitchenRate}</p>
-          </div>
-          <div className="employee__btns">
-            <button
-              className="employee__btn employee__btn--edit"
-              onClick={() => this.edit(employee.id)}
-            >
-              <FontAwesomeIcon icon={faEdit} />
-            </button>
-            <button className="employee__btn employee__btn--history">
-              <FontAwesomeIcon icon={faHistory} />
-            </button>
-            <button
-              onClick={() => this.openModal(employee.id)}
-              className="employee__btn employee__btn--delete"
-            >
-              <FontAwesomeIcon icon={faTrashAlt} />
-            </button>
-          </div>
-        </div>
+        <EmployeeCard
+          key={index}
+          index={index}
+          employee={employee}
+          edit={this.edit}
+        />
       )
     );
   }
-
-  renderAddEmployee() {}
 
   renderModal() {
     return (
@@ -157,6 +103,26 @@ class Employees extends Component {
         </div>
       </div>
     );
+  }
+
+  addEmployee() {
+    let newEmployee = {
+      firstName: '',
+      lastName: '',
+      hourlyRate: 0,
+      kitchenDayRate: 0,
+    };
+
+    let updatedEmployees = this.state.employees;
+    updatedEmployees.push(newEmployee);
+
+    let active = this.state.activeCards;
+    active.push(updatedEmployees.length - 1);
+
+    this.setState({
+      employees: updatedEmployees,
+      activeCards: active,
+    });
   }
 
   confirmDelete(id) {
@@ -194,4 +160,10 @@ class Employees extends Component {
   }
 }
 
-export default Employees;
+const mapStateToProps = (state) => ({
+  employees: state.employee.employees,
+});
+
+export default connect(mapStateToProps, { getEmployees, addEmployee })(
+  Employees
+);
