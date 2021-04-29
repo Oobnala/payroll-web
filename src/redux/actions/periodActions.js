@@ -11,5 +11,3 @@ export const getPayPeriods = () => async (dispatch) => {
       console.log(err);
     });
 };
-
-export const getCurrentPeriod = () => async (dispatch) => {};

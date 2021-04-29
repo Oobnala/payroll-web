@@ -8,6 +8,10 @@
   justify-content: center;
   align-items: center;
 
+  &__load {
+    font-size: 3rem;
+  }
+
   &__card {
     margin: 2rem;
     width: 35rem;
@@ -57,7 +61,7 @@
     }
   }
 
-  &__name-input {
+  &__input {
     border: none;
     text-align: center;
     color: $color-off-white;
@@ -93,21 +97,6 @@
     &--kitchen {
       grid-column: 2 / -1;
       grid-row: 2 / 3;
-    }
-
-    &-input {
-      border: none;
-      background-color: transparent;
-      border-bottom: 2px solid $color-off-white;
-      outline: none;
-      color: white;
-      text-align: center;
-      transition: 0.2s;
-
-      &:hover,
-      &:focus {
-        border-bottom: 2px solid $color-primary-secondary;
-      }
     }
   }
 

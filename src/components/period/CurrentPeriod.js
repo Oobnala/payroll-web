@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getPayPeriods } from '../../redux/actions/periodActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PeriodRow from './PeriodRows';
 import {
   faCaretRight,
   faCaretLeft,
@@ -99,7 +100,6 @@ class CurrentPeriod extends Component {
       'Tips',
       'History',
     ];
-    console.log(this.state.employees);
     return (
       <thead>
         <tr>
@@ -119,60 +119,7 @@ class CurrentPeriod extends Component {
       return (
         <tbody>
           {employees.map((employee, index) => (
-            <tr key={index} className="period__trow">
-              <td>{employee.firstName}</td>
-              <td>{employee.lastName}</td>
-              <td>
-                <input
-                  className="period__tinput"
-                  type="text"
-                  defaultValue={employee.hourlyRate}
-                />
-              </td>
-              <td>
-                <input
-                  className="period__tinput"
-                  type="text"
-                  defaultValue={employee.kitchenDayRate}
-                />
-              </td>
-              <td>
-                <input
-                  className="period__tinput"
-                  type="text"
-                  defaultValue={employee.kitchenDays}
-                />
-              </td>
-              <td>{employee.calculatedKitchenHours}</td>
-              <td>
-                <input
-                  className="period__tinput"
-                  type="text"
-                  defaultValue={employee.serverHours}
-                />
-              </td>
-              <td>
-                <input
-                  className="period__tinput"
-                  type="text"
-                  defaultValue={employee.sickHours}
-                />
-              </td>
-              <td>{employee.totalHours}</td>
-              <td>{employee.totalHoursRounded}</td>
-              <td>
-                <input
-                  className="period__tinput"
-                  type="text"
-                  defaultValue={employee.tips}
-                />
-              </td>
-              <td>
-                <button className="period__history">
-                  <FontAwesomeIcon icon={faHistory} />
-                </button>
-              </td>
-            </tr>
+            <PeriodRow key={index} employee={employee} index={index} />
           ))}
         </tbody>
       );
@@ -190,11 +137,16 @@ class CurrentPeriod extends Component {
             >
               <FontAwesomeIcon icon={faCaretLeft} />
             </button>
-            <h2 className="period__date">
-              {this.formatDate(this.props.dates[this.state.periodIndex]) +
-                ' - '}
-              {this.renderEndDate(this.props.dates[this.state.periodIndex])}
-            </h2>
+            {this.state.employees.length === 0 ? (
+              <h2 className="period__date">Loading Date...</h2>
+            ) : (
+              <h2 className="period__date">
+                {this.formatDate(this.props.dates[this.state.periodIndex]) +
+                  ' - '}
+                {this.renderEndDate(this.props.dates[this.state.periodIndex])}
+              </h2>
+            )}
+
             <button
               className="period__arrow"
               onClick={() => this.setNextPeriod()}
@@ -203,10 +155,16 @@ class CurrentPeriod extends Component {
             </button>
           </div>
         </header>
-        <table className="period__table" cellSpacing={0}>
-          {this.renderTableHeaders()}
-          {this.renderTableRows()}
-        </table>
+        {this.state.employees.length === 0 ? (
+          <div className="period__load">Loading....</div>
+        ) : (
+          <table className="period__table" cellSpacing={0}>
+            {this.renderTableHeaders()}
+
+            {this.renderTableRows()}
+          </table>
+        )}
+
         <button className="period__submit">Submit</button>
       </div>
     );

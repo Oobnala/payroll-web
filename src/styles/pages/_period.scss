@@ -5,6 +5,14 @@
   border-radius: 1rem;
   min-width: 80rem;
 
+  &__load {
+    background-color: $color-dark-gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20rem;
+  }
+
   &__header {
     background-color: $color-gray;
     height: 4rem;
