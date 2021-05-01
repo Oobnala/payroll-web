@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPayPeriods } from '../../redux/actions/periodActions';
+import { getPayPeriods, getDates } from '../../redux/actions/periodActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PeriodRow from './PeriodRows';
 import {
@@ -31,23 +31,20 @@ class CurrentPeriod extends Component {
       periodIndex: 0,
       employees: [],
     };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleUpdateEmployee = this.handleUpdateEmployee.bind(this);
   }
 
   componentDidMount() {
+    let length = this.props.dates.length - 1;
     this.props.getPayPeriods().then(() => {
+      this.props.getDates();
       this.setState({
-        periodIndex: this.props.dates.length - 1,
-        employees: this.props.periods[
-          this.props.dates[this.props.dates.length - 1]
-        ],
+        periodIndex: length,
+        employees: this.props.periods[this.props.dates[length]],
       });
     });
-  }
-
-  renderEndDate(date) {
-    let result = new Date(date);
-    result.setDate(result.getDate() + 15);
-    return this.formatDate(result);
   }
 
   formatDate(date) {
@@ -85,6 +82,25 @@ class CurrentPeriod extends Component {
     }
   }
 
+  getPeriodEnd() {
+    let startDate = this.props.dates[this.state.periodIndex];
+    return this.props.yearlyDates[startDate].periodEnd;
+  }
+
+  handleUpdateEmployee(updatedEmployee, index) {
+    let employees = this.state.employees;
+    employees[index] = updatedEmployee;
+
+    this.setState({
+      employees: employees,
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log(this.state.employees);
+  }
+
   renderTableHeaders() {
     const headers = [
       'First Name',
@@ -93,7 +109,7 @@ class CurrentPeriod extends Component {
       'Kitchen Rate',
       'Kitchen Days',
       'Kitchen Hours',
-      'Regular Hours',
+      'Server Hours',
       'Sick Hours',
       'Total',
       'Total Hours Rounded',
@@ -119,7 +135,12 @@ class CurrentPeriod extends Component {
       return (
         <tbody>
           {employees.map((employee, index) => (
-            <PeriodRow key={index} employee={employee} index={index} />
+            <PeriodRow
+              key={index}
+              employee={employee}
+              index={index}
+              handleUpdateEmployee={this.handleUpdateEmployee}
+            />
           ))}
         </tbody>
       );
@@ -143,7 +164,7 @@ class CurrentPeriod extends Component {
               <h2 className="period__date">
                 {this.formatDate(this.props.dates[this.state.periodIndex]) +
                   ' - '}
-                {this.renderEndDate(this.props.dates[this.state.periodIndex])}
+                {this.formatDate(this.getPeriodEnd())}
               </h2>
             )}
 
@@ -158,21 +179,26 @@ class CurrentPeriod extends Component {
         {this.state.employees.length === 0 ? (
           <div className="period__load">Loading....</div>
         ) : (
-          <table className="period__table" cellSpacing={0}>
-            {this.renderTableHeaders()}
-
-            {this.renderTableRows()}
-          </table>
+          <form onSubmit={this.handleSubmit}>
+            <table className="period__table" cellSpacing={0}>
+              {this.renderTableHeaders()}
+              {this.renderTableRows()}
+            </table>
+            <button type="submit" className="period__submit">
+              Submit
+            </button>
+          </form>
         )}
-
-        <button className="period__submit">Submit</button>
       </div>
     );
   }
 }
 const mapStateToProps = (state) => ({
   dates: Object.keys(state.period.periods),
+  yearlyDates: state.period.dates,
   periods: state.period.periods,
 });
 
-export default connect(mapStateToProps, { getPayPeriods })(CurrentPeriod);
+export default connect(mapStateToProps, { getPayPeriods, getDates })(
+  CurrentPeriod
+);
