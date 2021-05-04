@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheck,
   faWindowClose,
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
+import { update } from 'lodash';
 
 let EmployeeEdit = ({
   employee,
@@ -27,7 +28,8 @@ let EmployeeEdit = ({
   };
 
   const handleHourlyRateChange = (e) => {
-    setHourlyRate(e.target.value);
+    let value = parseFloat(e.target.value);
+    setHourlyRate(value.toFixed(2));
   };
 
   const handleKitchenRateChange = (e) => {
@@ -43,7 +45,7 @@ let EmployeeEdit = ({
       hourlyRate: hourlyRate,
       kitchenDayRate: kitchenDayRate,
     };
-
+    console.log(updatedEmployee);
     if (employee.isNew) {
       confirmEdit(updatedEmployee, index, true);
     } else {

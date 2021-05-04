@@ -64,6 +64,7 @@ class CurrentPeriod extends Component {
     if (this.state.periodIndex > 0) {
       let index = this.state.periodIndex - 1;
       let period = this.props.dates[index];
+      console.log(this.props.periods[period]);
       this.setState({
         periodIndex: index,
         employees: this.props.periods[period],
