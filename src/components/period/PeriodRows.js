@@ -63,7 +63,13 @@ const roundToNearestQuarter = (time) => {
 };
 
 const cleanValue = (value) => {
-  if (value === '' || !value.includes(':') || value.split(':')[1] === '') {
+  if (
+    value === '' ||
+    value === null ||
+    typeof value === 'undefined' ||
+    !value.includes(':') ||
+    value.split(':')[1] === ''
+  ) {
     return '0:00';
   }
   return value;
@@ -87,19 +93,23 @@ const calculateKitchenHours = (kitchenDayRate, hourlyRate, kitchenDays) => {
 };
 
 const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
-  const [kitchenDays, setKitchenDays] = useState(employee.kitchenDays);
-  const [kitchenHours, setKitchenHours] = useState(
-    employee.calculatedKitchenHours
-  );
-  const [serverHours, setServerHours] = useState(employee.serverHours);
-  const [sickHours, setSickHours] = useState(employee.sickHours);
-  const [totalHours, setTotal] = useState(employee.totalHours);
-  const [totalHoursRounded, setTotalHoursRounded] = useState(
-    employee.totalHoursRounded
-  );
-  const [tips, setTips] = useState(employee.tips);
-  console.log(employee);
+  const [kitchenDays, setKitchenDays] = useState('');
+  const [kitchenHours, setKitchenHours] = useState('');
+  const [serverHours, setServerHours] = useState('');
+  const [sickHours, setSickHours] = useState('');
+  const [totalHours, setTotal] = useState('');
+  const [totalHoursRounded, setTotalHoursRounded] = useState('');
+  const [tips, setTips] = useState(0);
+
   useEffect(() => {
+    setKitchenDays(employee.kitchenDays);
+    setKitchenHours(employee.calculatedKitchenHours);
+    setServerHours(employee.serverHours);
+    setSickHours(employee.sickHours);
+    setTotal(employee.totalHours);
+    setTotalHoursRounded(employee.totalHoursRounded);
+    setTips(employee.tips);
+
     let updatedEmployee = {
       ...employee,
       kitchenDays: kitchenDays,
@@ -120,6 +130,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
     totalHours,
     totalHoursRounded,
     tips,
+    employee,
   ]);
 
   // Dynammic Calculations happen here
