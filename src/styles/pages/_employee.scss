@@ -115,15 +115,22 @@
     border-radius: 0.5rem;
     box-shadow: 3px 3px 5px rgb(32, 31, 31);
     transition: 0.2s;
-
     color: $color-off-white;
     font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     &--edit {
       grid-column: 1 / 2;
     }
 
     &--history {
       grid-column: 2 / 3;
+      border: none;
+      background-color: transparent;
+      color: $color-off-white;
+      font-size: 2rem;
     }
 
     &--delete {

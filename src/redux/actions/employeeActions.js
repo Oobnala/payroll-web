@@ -13,6 +13,7 @@ export const getEmployees = () => async (dispatch) => {
 };
 
 export const addEmployee = (employeeProps) => async (dispatch) => {
+  console.log(employeeProps);
   await server
     .post('/add/employee', employeeProps)
     .then(() => {
@@ -24,6 +25,7 @@ export const addEmployee = (employeeProps) => async (dispatch) => {
 };
 
 export const editEmployee = (employeeProps) => async (dispatch) => {
+  console.log(employeeProps);
   await server
     .post('/edit/employee', employeeProps)
     .then(() => {
