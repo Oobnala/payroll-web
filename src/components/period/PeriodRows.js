@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHistory } from '@fortawesome/free-solid-svg-icons';
+import {
+  KITCHEN_DAYS,
+  CALCULATED_KITCHEN_HOURS,
+  SERVER_HOURS,
+  SICK_HOURS,
+  TOTAL_HOURS,
+  TOTAL_HOURS_ROUNDED,
+  TIPS,
+} from './properties';
 import {
   calculateKitchenHours,
   cleanValue,
@@ -8,15 +18,7 @@ import {
   roundToNearestQuarter,
 } from './calculations';
 
-const KITCHEN_DAYS = 'kitchenDays';
-const CALCULATED_KITCHEN_HOURS = 'calculatedKitchenHours';
-const SERVER_HOURS = 'serverHours';
-const SICK_HOURS = 'sickHours';
-const TOTAL_HOURS = 'totalHours';
-const TOTAL_HOURS_ROUNDED = 'totalHoursRounded';
-const TIPS = 'tips';
-
-const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
+const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
   // Makes copy of employee object and sets to local state via hooks.
   // Can alter currentEmployee data then pass to CurrentPeriod.js
   // to update actual employees state when handleOnChange is done
@@ -27,7 +29,6 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
     setEmployee(employee);
   }, [employee]);
 
-  // Dynammic Calculations happen here
   const handleOnChange = (e) => {
     let value = e.target.value;
 
@@ -55,6 +56,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
         setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
         break;
       }
+
       case SERVER_HOURS: {
         setEmployeeValue(SERVER_HOURS, value);
 
@@ -68,16 +70,20 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
         setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
         break;
       }
-      case SICK_HOURS:
+
+      case SICK_HOURS: {
         setEmployeeValue(SICK_HOURS, value);
         break;
-      case TIPS:
+      }
+
+      case TIPS: {
         let tip = parseFloat(value).toFixed(2);
         if (isNaN(tip)) {
           tip = 0;
         }
         setEmployeeValue(TIPS, tip);
         break;
+      }
     }
 
     handleUpdateEmployee(currentEmployee, index);
@@ -114,6 +120,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
           }
           name={KITCHEN_DAYS}
           onChange={handleOnChange}
+          disabled={!isCurrent}
         />
       </td>
       <td>
@@ -132,6 +139,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
           }
           name={SERVER_HOURS}
           onChange={handleOnChange}
+          disabled={!isCurrent}
         />
       </td>
       <td>
@@ -145,6 +153,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
           }
           name={SICK_HOURS}
           onChange={handleOnChange}
+          disabled={!isCurrent}
         />
       </td>
       <td>
@@ -164,12 +173,15 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee }) => {
           value={currentEmployee.tips !== null ? currentEmployee.tips : 0}
           name={TIPS}
           onChange={handleOnChange}
+          disabled={!isCurrent}
         />
       </td>
       <td>
-        <button className="period__history">
-          <FontAwesomeIcon icon={faHistory} />
-        </button>
+        <Link to={{ pathname: `/employee/${employee.id}` }}>
+          <button className="period__history">
+            <FontAwesomeIcon icon={faHistory} />
+          </button>
+        </Link>
       </td>
     </tr>
   );

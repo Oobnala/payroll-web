@@ -1,13 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getPayPeriods, getDates } from '../../redux/actions/periodActions';
+import {
+  getPayPeriods,
+  getDates,
+  submit,
+} from '../../redux/actions/periodActions';
+import {
+  KITCHEN_DAYS,
+  CALCULATED_KITCHEN_HOURS,
+  SERVER_HOURS,
+  SICK_HOURS,
+  TOTAL_HOURS,
+  TOTAL_HOURS_ROUNDED,
+  TIPS,
+  PERIOD_START,
+  PERIOD_END,
+  CHECK_DATE,
+} from './properties';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PeriodRow from './PeriodRows';
-import {
-  faCaretRight,
-  faCaretLeft,
-  faHistory,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 
 const MONTHS = [
   'January',
@@ -28,8 +40,12 @@ class CurrentPeriod extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      periods: {},
       periodIndex: 0,
       employees: [],
+      dates: [],
+      yearlyDates: [],
+      isCurrent: true,
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -37,19 +53,78 @@ class CurrentPeriod extends Component {
   }
 
   componentDidMount() {
-    let length = this.props.dates.length - 1;
     this.props.getPayPeriods().then(() => {
-      this.props.getDates();
-      this.setState({
-        periodIndex: length,
-        employees: this.props.periods[this.props.dates[length]],
+      this.props.getDates().then(() => {
+        let length = this.props.dates.length - 1;
+        this.setState(
+          {
+            periods: this.props.periods,
+            periodIndex: length,
+            employees: this.props.periods[this.props.dates[length]],
+            dates: this.props.dates,
+            yearlyDates: Object.keys(this.props.yearlyDates),
+            isCurrent: true,
+          },
+          () => {
+            if (this.checkDate()) {
+              this.generateTemplate();
+            }
+          }
+        );
       });
     });
   }
 
+  generateTemplate() {
+    let newDates = this.state.dates;
+    let newPeriodDate = this.state.yearlyDates[this.state.periodIndex + 1];
+    newDates.push(newPeriodDate);
+
+    let newEmployees = this.props.employees.map((employee) => {
+      let { addedAt, modifiedAt, ...newEmployee } = employee;
+      newEmployee[KITCHEN_DAYS] = 0;
+      newEmployee[CALCULATED_KITCHEN_HOURS] = '00:00';
+      newEmployee[SERVER_HOURS] = '00:00';
+      newEmployee[SICK_HOURS] = '00:00';
+      newEmployee[TOTAL_HOURS] = '00:00';
+      newEmployee[TOTAL_HOURS_ROUNDED] = '00:00';
+      newEmployee[TIPS] = 0;
+      newEmployee[PERIOD_START] = newPeriodDate;
+      newEmployee[PERIOD_END] = this.getPeriodEnd(newPeriodDate);
+      newEmployee[CHECK_DATE] = this.props.yearlyDates[newPeriodDate].checkDate;
+      return newEmployee;
+    });
+
+    let newPeriods = this.state.periods;
+    newPeriods[newPeriodDate] = newEmployees;
+
+    this.setState({
+      periods: newPeriods,
+      periodIndex: this.state.periodIndex + 1,
+      dates: newDates,
+      employees: newEmployees,
+      isCurrent: true,
+    });
+  }
+
+  checkDate() {
+    let today = new Date();
+    let endDate = new Date(
+      this.getPeriodEnd(this.state.dates[this.state.periodIndex])
+    );
+    endDate = new Date(endDate.getTime() + endDate.getTimezoneOffset() * 60000);
+
+    today.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+
+    if (today.getTime() === endDate.getTime()) {
+      return true;
+    }
+    return false;
+  }
+
   formatDate(date) {
     let selectedDate = new Date(date);
-
     // Since date was one day off when converted to date object, must offset to local time
     selectedDate = new Date(
       selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000
@@ -63,27 +138,36 @@ class CurrentPeriod extends Component {
   setPrevPeriod() {
     if (this.state.periodIndex > 0) {
       let index = this.state.periodIndex - 1;
-      let period = this.props.dates[index];
+      let period = this.state.dates[index];
       this.setState({
         periodIndex: index,
-        employees: this.props.periods[period],
+        employees: this.state.periods[period],
+        isCurrent: false,
       });
     }
   }
 
   setNextPeriod() {
-    if (this.state.periodIndex < this.props.dates.length - 1) {
+    if (this.state.periodIndex < this.state.dates.length - 1) {
       let index = this.state.periodIndex + 1;
-      let period = this.props.dates[index];
-      this.setState({
-        periodIndex: index,
-        employees: this.props.periods[period],
-      });
+      let period = this.state.dates[index];
+      this.setState(
+        {
+          periodIndex: index,
+          employees: this.state.periods[period],
+        },
+        () => {
+          if (this.state.periodIndex === this.state.dates.length - 1) {
+            this.setState({
+              isCurrent: true,
+            });
+          }
+        }
+      );
     }
   }
 
-  getPeriodEnd() {
-    let startDate = this.props.dates[this.state.periodIndex];
+  getPeriodEnd(startDate) {
     return this.props.yearlyDates[startDate].periodEnd;
   }
 
@@ -98,7 +182,7 @@ class CurrentPeriod extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state.employees);
+    this.props.submit(this.state.employees);
   }
 
   renderTableHeaders() {
@@ -140,6 +224,7 @@ class CurrentPeriod extends Component {
               employee={employee}
               index={index}
               handleUpdateEmployee={this.handleUpdateEmployee}
+              isCurrent={this.state.isCurrent}
             />
           ))}
         </tbody>
@@ -162,9 +247,11 @@ class CurrentPeriod extends Component {
               <h2 className="period__date">Loading Date...</h2>
             ) : (
               <h2 className="period__date">
-                {this.formatDate(this.props.dates[this.state.periodIndex]) +
+                {this.formatDate(this.state.dates[this.state.periodIndex]) +
                   ' - '}
-                {this.formatDate(this.getPeriodEnd())}
+                {this.formatDate(
+                  this.getPeriodEnd(this.state.dates[this.state.periodIndex])
+                )}
               </h2>
             )}
 
@@ -184,9 +271,11 @@ class CurrentPeriod extends Component {
               {this.renderTableHeaders()}
               {this.renderTableRows()}
             </table>
-            <button type="submit" className="period__submit">
-              Submit
-            </button>
+            {this.state.isCurrent && (
+              <button type="submit" className="period__submit">
+                Submit
+              </button>
+            )}
           </form>
         )}
       </div>
@@ -197,8 +286,9 @@ const mapStateToProps = (state) => ({
   dates: Object.keys(state.period.periods),
   yearlyDates: state.period.dates,
   periods: state.period.periods,
+  employees: state.employee.employees,
 });
 
-export default connect(mapStateToProps, { getPayPeriods, getDates })(
+export default connect(mapStateToProps, { getPayPeriods, getDates, submit })(
   CurrentPeriod
 );

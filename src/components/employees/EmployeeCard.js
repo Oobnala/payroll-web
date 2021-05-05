@@ -1,3 +1,5 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faHistory } from '@fortawesome/free-solid-svg-icons';
 
@@ -22,9 +24,14 @@ const EmployeeCard = ({ employee, edit, index }) => {
       >
         <FontAwesomeIcon icon={faEdit} />
       </button>
-      <button className="employee__btn employee__btn--history">
-        <FontAwesomeIcon icon={faHistory} />
-      </button>
+      <Link
+        to={{ pathname: `/employee/${employee.id}` }}
+        className="employee__btn"
+      >
+        <button className="employee__btn--history">
+          <FontAwesomeIcon icon={faHistory} />
+        </button>
+      </Link>
     </div>
   );
 };

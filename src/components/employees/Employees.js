@@ -63,9 +63,9 @@ class Employees extends Component {
     });
   }
 
-  confirmEdit(updatedEmployee, index, isNewEmployee) {
+  confirmEdit(updatedEmployee, index) {
     let cards = this.state.activeCards;
-    if (isNewEmployee) {
+    if (updatedEmployee.isNew) {
       this.props.addEmployee(updatedEmployee).then(() => {
         this.props.getEmployees().then(() => {
           remove(cards, (activeIndex) => {

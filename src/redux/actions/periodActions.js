@@ -1,5 +1,5 @@
 import server from '../../api/server';
-import { GET_ALL_PAY_PERIODS, GET_DATES } from './types';
+import { GET_ALL_PAY_PERIODS, GET_DATES, SUBMIT } from './types';
 
 export const getPayPeriods = () => async (dispatch) => {
   await server
@@ -18,5 +18,19 @@ export const getDates = () => async (dispatch) => {
     .then((response) => {
       dispatch({ type: GET_DATES, payload: response.data });
     })
-    .catch((err) => {});
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const submit = (employees) => async (dispatch) => {
+  await server
+    .post('submit', { employees: employees })
+    .then((response) => {
+      console.log(response);
+      dispatch({ type: SUBMIT });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

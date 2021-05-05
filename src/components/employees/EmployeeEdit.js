@@ -47,9 +47,10 @@ let EmployeeEdit = ({
     };
     console.log(updatedEmployee);
     if (employee.isNew) {
-      confirmEdit(updatedEmployee, index, true);
+      updatedEmployee['isNew'] = true;
+      confirmEdit(updatedEmployee, index);
     } else {
-      confirmEdit(updatedEmployee, index, false);
+      confirmEdit(updatedEmployee, index);
     }
   };
 
