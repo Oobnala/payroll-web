@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getHistory } from '../../redux/actions/historyActions';
+import HistoryRows from './HistoryRows';
 
 class History extends Component {
   constructor(props) {
@@ -11,8 +12,11 @@ class History extends Component {
   }
 
   componentDidMount() {
-    this.props.getHistory(this.props.match.params.id);
-    console.log(this.props.history);
+    this.props.getHistory(this.props.match.params.id).then(() => {
+      this.setState({
+        history: this.props.history,
+      });
+    });
   }
 
   renderTableHeaders() {
@@ -43,19 +47,12 @@ class History extends Component {
   }
 
   renderTableRows() {
-    let employees = this.state.employees;
-    if (employees) {
+    let history = this.state.history;
+    if (history) {
       return (
         <tbody>
-          {employees.map((employee, index) => (
-            // <PeriodRow
-            //   key={index}
-            //   employee={employee}
-            //   index={index}
-            //   handleUpdateEmployee={this.handleUpdateEmployee}
-            //   isCurrent={this.state.isCurrent}
-            // />
-            <div></div>
+          {history.map((period, index) => (
+            <HistoryRows key={index} period={period} />
           ))}
         </tbody>
       );
@@ -65,15 +62,25 @@ class History extends Component {
   render() {
     return (
       <div className="history">
-        <header className="history__header">Header</header>
-        <table className="history__table">{this.renderTableHeaders()}</table>
+        <header className="history__header">
+          <h2>
+            {this.state.history.length !== 0 &&
+              this.state.history[1].firstName +
+                ' ' +
+                this.state.history[1].lastName}
+          </h2>
+        </header>
+        <table className="history__table" cellSpacing={0}>
+          {this.renderTableHeaders()}
+          {this.renderTableRows()}
+        </table>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  history: state.history.history,
+  history: Object.values(state.history.history),
 });
 
 export default connect(mapStateToProps, { getHistory })(History);
