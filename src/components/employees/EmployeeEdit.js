@@ -90,13 +90,13 @@ const EmployeeEdit = ({
       </div>
       <div className="employee__btns">
         <button
-          className="employee__btn employee__btn--edit"
+          className="employee__btn"
           onClick={() => cancelEdit(index)}
           type="button"
         >
           <FontAwesomeIcon icon={faWindowClose} />
         </button>
-        <button className="employee__btn employee__btn--history" type="submit">
+        <button className="employee__btn" type="submit">
           <FontAwesomeIcon icon={faCheck} />
         </button>
         <button
