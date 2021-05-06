@@ -25,7 +25,9 @@ const EmployeeCard = ({ employee, edit, index }) => {
         <FontAwesomeIcon icon={faEdit} />
       </button>
       <Link
-        to={{ pathname: `/employee/${employee.id}` }}
+        to={{
+          pathname: `/employee/${employee.id}`,
+        }}
         className="employee__btn"
       >
         <button className="employee__btn--history">

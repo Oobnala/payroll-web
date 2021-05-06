@@ -20,21 +20,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PeriodRow from './PeriodRows';
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
-
-const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
+import { formatDate } from './helpers';
+import { has } from 'lodash';
 
 class CurrentPeriod extends Component {
   constructor(props) {
@@ -77,7 +64,9 @@ class CurrentPeriod extends Component {
 
   generateTemplate() {
     let newDates = this.state.dates;
-    let newPeriodDate = this.state.yearlyDates[this.state.periodIndex + 1];
+    let index = this.state.periodIndex;
+    let yearlyDates = this.state.yearlyDates;
+    let newPeriodDate = yearlyDates[index + 1];
     newDates.push(newPeriodDate);
 
     let newEmployees = this.props.employees.map((employee) => {
@@ -108,31 +97,39 @@ class CurrentPeriod extends Component {
   }
 
   checkDate() {
+    let currentIndex = this.state.periodIndex;
+    let prevDates = this.state.dates;
+    let yearlyDates = this.state.yearlyDates;
+    let yearlyDatesDetails = this.props.yearlyDates;
+
     let today = new Date();
-    let endDate = new Date(
-      this.getPeriodEnd(this.state.dates[this.state.periodIndex])
+    let prevEndDate = new Date(this.getPeriodEnd(prevDates[currentIndex]));
+    let currentStartDate =
+      yearlyDatesDetails[yearlyDates[currentIndex + 1]].periodStart;
+    let currentEndDate = new Date(
+      yearlyDatesDetails[yearlyDates[currentIndex + 1]].periodEnd
     );
-    endDate = new Date(endDate.getTime() + endDate.getTimezoneOffset() * 60000);
+
+    prevEndDate = new Date(
+      prevEndDate.getTime() + prevEndDate.getTimezoneOffset() * 60000
+    );
+    currentEndDate = new Date(
+      currentEndDate.getTime() + currentEndDate.getTimezoneOffset() * 60000
+    );
 
     today.setHours(0, 0, 0, 0);
-    endDate.setHours(0, 0, 0, 0);
+    prevEndDate.setHours(0, 0, 0, 0);
+    currentEndDate.setHours(0, 0, 0, 0);
 
-    if (today.getTime() === endDate.getTime()) {
+    if (
+      today.getTime() >= prevEndDate.getTime() &&
+      today.getTime() <= currentEndDate.getTime() &&
+      !has(this.state.periods, currentStartDate)
+    ) {
+      console.log('hi');
       return true;
     }
     return false;
-  }
-
-  formatDate(date) {
-    let selectedDate = new Date(date);
-    // Since date was one day off when converted to date object, must offset to local time
-    selectedDate = new Date(
-      selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000
-    );
-    let month = selectedDate.getMonth() + 1;
-    let day = selectedDate.getDate();
-    let year = selectedDate.getFullYear();
-    return MONTHS[month - 1] + ` ${day},` + ` ${year}`;
   }
 
   setPrevPeriod() {
@@ -184,20 +181,24 @@ class CurrentPeriod extends Component {
     e.preventDefault();
 
     const { employees } = this.state;
-    const previousDate = this.state.dates[this.state.periodIndex - 1]
-    const previousEmployees = this.state.periods[previousDate]
+    const previousDate = this.state.dates[this.state.periodIndex - 1];
+    const previousEmployees = this.state.periods[previousDate];
 
-    let employeesToSubmit = [...employees]
-    employeesToSubmit.map(employee => employee['isNew'] = false)
-  
+    let employeesToSubmit = [...employees];
+    employeesToSubmit.map((employee) => (employee['isNew'] = false));
+
     if (previousEmployees.length !== employees.length) {
-      const differences = employees.filter(({ id: id1 }) => !previousEmployees.some(({ id: id2 }) => id2 === id1));
-      const commons = employees.filter(({ id: id1 }) => previousEmployees.some(({ id: id2 }) => id2 === id1));
+      const differences = employees.filter(
+        ({ id: id1 }) => !previousEmployees.some(({ id: id2 }) => id2 === id1)
+      );
+      const commons = employees.filter(({ id: id1 }) =>
+        previousEmployees.some(({ id: id2 }) => id2 === id1)
+      );
 
-      differences.map(employee => employee['isNew'] = true)
+      differences.map((employee) => (employee['isNew'] = true));
 
-      employeesToSubmit = commons.concat(differences)
-    } 
+      employeesToSubmit = commons.concat(differences);
+    }
 
     this.props.submit(employeesToSubmit);
   }
@@ -264,9 +265,8 @@ class CurrentPeriod extends Component {
               <h2 className="period__date">Loading Date...</h2>
             ) : (
               <h2 className="period__date">
-                {this.formatDate(this.state.dates[this.state.periodIndex]) +
-                  ' - '}
-                {this.formatDate(
+                {formatDate(this.state.dates[this.state.periodIndex]) + ' - '}
+                {formatDate(
                   this.getPeriodEnd(this.state.dates[this.state.periodIndex])
                 )}
               </h2>

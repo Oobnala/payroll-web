@@ -107,8 +107,8 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
     <tr key={index} className="period__trow">
       <td>{currentEmployee.firstName}</td>
       <td>{currentEmployee.lastName}</td>
-      <td>{currentEmployee.hourlyRate}</td>
-      <td>{currentEmployee.kitchenDayRate}</td>
+      <td>{'$' + currentEmployee.hourlyRate}</td>
+      <td>{'$' + currentEmployee.kitchenDayRate}</td>
       <td>
         <input
           className="period__tinput"
@@ -177,7 +177,11 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         />
       </td>
       <td>
-        <Link to={{ pathname: `/employee/${employee.id}` }}>
+        <Link
+          to={{
+            pathname: `/employee/${employee.id}`,
+          }}
+        >
           <button className="period__history">
             <FontAwesomeIcon icon={faHistory} />
           </button>

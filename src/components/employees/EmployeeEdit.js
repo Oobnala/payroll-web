@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheck,
   faWindowClose,
   faTrashAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { update } from 'lodash';
 
-let EmployeeEdit = ({
+const EmployeeEdit = ({
   employee,
   confirmEdit,
   cancelEdit,
@@ -28,12 +27,13 @@ let EmployeeEdit = ({
   };
 
   const handleHourlyRateChange = (e) => {
-    let value = parseFloat(e.target.value);
+    let value = parseFloat(e.target.value) || 0;
     setHourlyRate(value.toFixed(2));
   };
 
   const handleKitchenRateChange = (e) => {
-    setKitchenRate(e.target.value);
+    let value = parseFloat(e.target.value) || 0;
+    setKitchenRate(value.toFixed(2));
   };
 
   const handleSubmit = (e) => {
@@ -45,7 +45,7 @@ let EmployeeEdit = ({
       hourlyRate: hourlyRate,
       kitchenDayRate: kitchenDayRate,
     };
-    console.log(updatedEmployee);
+
     if (employee.isNew) {
       updatedEmployee['isNew'] = true;
       confirmEdit(updatedEmployee, index);
@@ -83,7 +83,7 @@ let EmployeeEdit = ({
         <h2>Kitchen Rate</h2>
         <input
           className="employee__input"
-          value={kitchenDayRate}
+          value={kitchenDayRate !== 0 ? kitchenDayRate : 0}
           placeholder="Kitchen Rate"
           onChange={handleKitchenRateChange}
         />
