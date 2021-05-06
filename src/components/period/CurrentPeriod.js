@@ -182,7 +182,24 @@ class CurrentPeriod extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.submit(this.state.employees);
+
+    const { employees } = this.state;
+    const previousDate = this.state.dates[this.state.periodIndex - 1]
+    const previousEmployees = this.state.periods[previousDate]
+
+    let employeesToSubmit = [...employees]
+    employeesToSubmit.map(employee => employee['isNew'] = false)
+  
+    if (previousEmployees.length !== employees.length) {
+      const differences = employees.filter(({ id: id1 }) => !previousEmployees.some(({ id: id2 }) => id2 === id1));
+      const commons = employees.filter(({ id: id1 }) => previousEmployees.some(({ id: id2 }) => id2 === id1));
+
+      differences.map(employee => employee['isNew'] = true)
+
+      employeesToSubmit = commons.concat(differences)
+    } 
+
+    this.props.submit(employeesToSubmit);
   }
 
   renderTableHeaders() {
