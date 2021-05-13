@@ -233,7 +233,7 @@ class CurrentPeriod extends Component {
 
   renderTableRows() {
     let employees = this.state.employees;
-    if (employees) {
+    if (employees.length > 0) {
       return (
         <tbody>
           {employees.map((employee, index) => (
@@ -247,6 +247,8 @@ class CurrentPeriod extends Component {
           ))}
         </tbody>
       );
+    } else {
+      console.error("No employees retrieved")
     }
   }
 
