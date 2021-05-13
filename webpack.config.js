@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   entry: ['./src/index.js'],
   output: {
-    path: path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'build'), // public (local) or build (production)
     filename: 'bundle.js',
   },
   performance: { hints: false },
