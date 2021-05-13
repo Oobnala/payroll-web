@@ -40,6 +40,10 @@ class CurrentPeriod extends Component {
   }
 
   componentDidMount() {
+    this.initializePeriod();
+  }
+
+  initializePeriod() {
     this.props.getPayPeriods().then(() => {
       this.props.getDates().then(() => {
         let length = this.props.dates.length - 1;
@@ -126,7 +130,6 @@ class CurrentPeriod extends Component {
       today.getTime() <= currentEndDate.getTime() &&
       !has(this.state.periods, currentStartDate)
     ) {
-      console.log('hi');
       return true;
     }
     return false;
@@ -248,7 +251,7 @@ class CurrentPeriod extends Component {
         </tbody>
       );
     } else {
-      console.error("No employees retrieved from db")
+      console.error('No employees retrieved from db');
     }
   }
 

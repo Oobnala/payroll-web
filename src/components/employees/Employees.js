@@ -34,12 +34,12 @@ class Employees extends Component {
 
   componentDidMount() {
     this.props.getEmployees().then(() => {
-      this.state = {
+      this.setState({
         employees: this.props.employees,
         activeCards: [],
         deleteModalActive: false,
         deleteEmployeeId: -1,
-      };
+      });
     });
   }
 
