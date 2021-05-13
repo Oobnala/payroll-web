@@ -27,11 +27,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "REACT_APP_BASE_URL=http://54.67.114.226/ react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  
+
   "homepage":".",
 
   "eslintConfig": {
