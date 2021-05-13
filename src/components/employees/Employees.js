@@ -43,6 +43,15 @@ class Employees extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.employees !== this.props.employees) {
+      console.log('Update Employees');
+      this.setState({
+        employees: this.props.employees,
+      });
+    }
+  }
+
   edit(index) {
     let cards = this.state.activeCards;
     cards.push(index);
