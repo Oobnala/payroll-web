@@ -248,7 +248,7 @@ class CurrentPeriod extends Component {
         </tbody>
       );
     } else {
-      console.error("No employees retrieved")
+      console.error("No employees retrieved from db")
     }
   }
 
