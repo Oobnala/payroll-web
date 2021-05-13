@@ -43,6 +43,15 @@ class CurrentPeriod extends Component {
     this.initializePeriod();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.periods !== this.props.periods) {
+      console.log('Update');
+      this.setState({
+        periods: this.props.periods,
+      });
+    }
+  }
+
   initializePeriod() {
     this.props.getPayPeriods().then(() => {
       this.props.getDates().then(() => {
