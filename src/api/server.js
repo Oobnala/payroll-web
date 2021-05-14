@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const server = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: "http://api.chaoprayanovato.com/",
   timeout: 3000,
   headers: {
     'content-type': 'application/json',

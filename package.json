@@ -27,7 +27,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "NODE_ENV=production PORT=80 REACT_APP_BASE_URL=http://api.chaoprayanovato.com/ react-scripts build",
+    "build": "NODE_ENV=production PORT=80 react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
