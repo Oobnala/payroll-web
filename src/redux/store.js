@@ -11,7 +11,7 @@ const persistConfig = {
   storage,
 };
 
-const composeEnhancers = composeWithDevTools || compose;
+const composeEnhancers = (process.env.NODE_ENV === "production") ? compose : composeWithDevTools;
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
