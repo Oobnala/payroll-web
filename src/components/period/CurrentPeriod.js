@@ -105,10 +105,12 @@ class CurrentPeriod extends Component {
       newEmployee[PERIOD_START] = newPeriodDate;
       newEmployee[PERIOD_END] = this.getPeriodEnd(newPeriodDate);
       newEmployee[CHECK_DATE] = this.props.yearlyDates[newPeriodDate].checkDate;
+
+      console.log("new emp inside map", newEmployee)
       return newEmployee;
     });
 
-    console.log(newEmployees)
+    console.log("newemps", newEmployees)
 
     let newPeriods = this.state.periods;
     newPeriods[newPeriodDate] = newEmployees;
