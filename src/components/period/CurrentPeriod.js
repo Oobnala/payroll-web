@@ -109,7 +109,6 @@ class CurrentPeriod extends Component {
     let newPeriods = this.state.periods;
     newPeriods[newPeriodDate] = newEmployees;
 
-    console.log("generating template for ", newPeriods[newPeriods.length - 1])
     this.setState({
       periods: newPeriods,
       periodIndex: this.state.periodIndex + 1,
@@ -125,7 +124,7 @@ class CurrentPeriod extends Component {
     let yearlyDates = this.state.yearlyDates;
     let yearlyDatesDetails = this.props.yearlyDates;
 
-    let today = new Date();
+    let today = new Date()
     let prevEndDate = new Date(this.getPeriodEnd(prevDates[currentIndex]));
     let currentStartDate =
       yearlyDatesDetails[yearlyDates[currentIndex + 1]].periodStart;
@@ -142,11 +141,6 @@ class CurrentPeriod extends Component {
 
     prevEndDate.setHours(0, 0, 0, 0);
     currentEndDate.setHours(0, 0, 0, 0);
-
-    console.log(today)
-    console.log(prevEndDate)
-    console.log(currentEndDate)
-    console.log(!has(this.state.periods, currentStartDate))
 
     if (
       today.getTime() >= prevEndDate.getTime() &&
@@ -209,12 +203,17 @@ class CurrentPeriod extends Component {
 
     const { employees } = this.state;
     const previousDate = this.state.dates[this.state.periodIndex - 1];
-    const previousEmployees = this.state.periods[previousDate];
+    const previousEmployees = (typeof this.state.periods[previousDate] === "undefined") ? [] : this.state.periods[previousDate];
 
     let employeesToSubmit = [...employees];
     employeesToSubmit.map((employee) => (employee['isNew'] = false));
 
-    if (previousEmployees.length !== employees.length) {
+    let previousEmployeesLen = 0;
+    if (typeof previousEmployees !== "undefined") {
+      previousEmployeesLen = previousEmployees.length
+    }
+
+    if (previousEmployeesLen !== employees.length) {
       const differences = employees.filter(
         ({ id: id1 }) => !previousEmployees.some(({ id: id2 }) => id2 === id1)
       );
