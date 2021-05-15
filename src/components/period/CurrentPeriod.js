@@ -146,7 +146,7 @@ class CurrentPeriod extends Component {
     console.log(prevEndDate)
     console.log(currentEndDate)
     console.log(!has(this.state.periods, currentStartDate))
-    
+
     if (
       today.getTime() >= prevEndDate.getTime() &&
       today.getTime() <= currentEndDate.getTime() &&
@@ -204,6 +204,7 @@ class CurrentPeriod extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    alert('Employee data has been submitted');
 
     const { employees } = this.state;
     const previousDate = this.state.dates[this.state.periodIndex - 1];
