@@ -84,10 +84,13 @@ class CurrentPeriod extends Component {
   }
 
   generateTemplate() {
+    console.log("generating template")
     let newDates = this.state.dates;
     let index = this.state.periodIndex;
     let yearlyDates = this.state.yearlyDates;
     let newPeriodDate = yearlyDates[index + 1];
+    
+    console.log("adding new period date", newPeriodDate)
     newDates.push(newPeriodDate);
 
     let newEmployees = this.props.employees.map((employee) => {
@@ -105,10 +108,19 @@ class CurrentPeriod extends Component {
       return newEmployee;
     });
 
+    console.log(newEmployees)
+
     let newPeriods = this.state.periods;
     newPeriods[newPeriodDate] = newEmployees;
 
     console.log("setting new state")
+    console.log({
+      periods: newPeriods,
+      periodIndex: this.state.periodIndex + 1,
+      dates: newDates,
+      employees: newEmployees,
+      isCurrent: true,
+    })
     this.setState({
       periods: newPeriods,
       periodIndex: this.state.periodIndex + 1,
