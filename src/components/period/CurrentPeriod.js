@@ -62,6 +62,7 @@ class CurrentPeriod extends Component {
     this.props.getPayPeriods().then(() => {
       this.props.getDates().then(() => {
         console.log("here in initialize")
+        console.log("employees initialize ", this.props.periods[this.props.dates[length]])
         let length = this.props.dates.length - 1;
         this.setState(
           {
