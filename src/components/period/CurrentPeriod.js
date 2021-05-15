@@ -93,6 +93,8 @@ class CurrentPeriod extends Component {
     console.log("adding new period date", newPeriodDate)
     newDates.push(newPeriodDate);
 
+    console.log("emps", this.props.employees)
+
     let newEmployees = this.props.employees.map((employee) => {
       let { addedAt, modifiedAt, ...newEmployee } = employee;
       newEmployee[KITCHEN_DAYS] = 0;
