@@ -136,7 +136,6 @@ class CurrentPeriod extends Component {
       currentEndDate.getTime() + currentEndDate.getTimezoneOffset() * 60000
     );
 
-    today.setHours(0, 0, 0, 0);
     prevEndDate.setHours(0, 0, 0, 0);
     currentEndDate.setHours(0, 0, 0, 0);
 
