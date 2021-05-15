@@ -61,8 +61,6 @@ class CurrentPeriod extends Component {
   initializePeriod() {
     this.props.getPayPeriods().then(() => {
       this.props.getDates().then(() => {
-        console.log("here in initialize")
-        console.log("employees initialize ", this.props.periods[this.props.dates[length]])
         let length = this.props.dates.length - 1;
         
         this.setState(
@@ -75,7 +73,6 @@ class CurrentPeriod extends Component {
             isCurrent: true,
           },
           () => {
-            console.log("after setting state?")
             if (this.checkDate()) {
               this.generateTemplate(this.props.periods[this.props.dates[length]]);
             }
@@ -86,16 +83,12 @@ class CurrentPeriod extends Component {
   }
 
   generateTemplate(employees) {
-    console.log("generating template")
     let newDates = this.state.dates;
     let index = this.state.periodIndex;
     let yearlyDates = this.state.yearlyDates;
     let newPeriodDate = yearlyDates[index + 1];
     
-    console.log("adding new period date", newPeriodDate)
     newDates.push(newPeriodDate);
-
-    console.log("emps", employees)
 
     let newEmployees = employees.map((employee) => {
       let { addedAt, modifiedAt, ...newEmployee } = employee;
@@ -110,32 +103,18 @@ class CurrentPeriod extends Component {
       newEmployee[PERIOD_END] = this.getPeriodEnd(newPeriodDate);
       newEmployee[CHECK_DATE] = this.props.yearlyDates[newPeriodDate].checkDate;
 
-      console.log("new emp inside map", newEmployee)
       return newEmployee;
     });
-
-    console.log("newemps", newEmployees)
 
     let newPeriods = this.state.periods;
     newPeriods[newPeriodDate] = newEmployees;
 
-    console.log("setting new state")
-    console.log({
-      periods: newPeriods,
-      periodIndex: this.state.periodIndex + 1,
-      dates: newDates,
-      employees: newEmployees,
-      isCurrent: true,
-    })
     this.setState({
       periods: newPeriods,
       periodIndex: this.state.periodIndex + 1,
       dates: newDates,
       employees: newEmployees,
       isCurrent: true,
-    }, 
-    () => { 
-      console.log("done setting state") 
     });
   }
 
@@ -162,11 +141,6 @@ class CurrentPeriod extends Component {
 
     prevEndDate.setHours(0, 0, 0, 0);
     currentEndDate.setHours(0, 0, 0, 0);
-
-    console.log(today)
-    console.log(prevEndDate)
-    console.log(currentEndDate)
-    console.log(!has(this.state.periods, currentStartDate))
 
     if (
       today.getTime() >= prevEndDate.getTime() &&
@@ -328,9 +302,6 @@ class CurrentPeriod extends Component {
             </button>
           </div>
         </header>
-        { console.log(this.state.employees.length) }
-        { console.log(this.state.employees) }
-
         {this.state.employees.length === 0 ? (
           <div className="period__load">Loading....</div>
         ) : (
