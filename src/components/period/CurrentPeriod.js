@@ -109,6 +109,7 @@ class CurrentPeriod extends Component {
     let newPeriods = this.state.periods;
     newPeriods[newPeriodDate] = newEmployees;
 
+    console.log("generating template for ", newPeriods[newPeriods.length - 1])
     this.setState({
       periods: newPeriods,
       periodIndex: this.state.periodIndex + 1,
