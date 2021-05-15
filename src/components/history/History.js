@@ -65,9 +65,9 @@ class History extends Component {
         <header className="history__header">
           <h2>
             {this.state.history.length !== 0 &&
-              this.state.history[1].firstName +
+              this.state.history[0].firstName +
                 ' ' +
-                this.state.history[1].lastName}
+                this.state.history[0].lastName}
           </h2>
         </header>
         <table className="history__table" cellSpacing={0}>
