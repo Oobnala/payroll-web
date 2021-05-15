@@ -64,6 +64,7 @@ class CurrentPeriod extends Component {
         console.log("here in initialize")
         console.log("employees initialize ", this.props.periods[this.props.dates[length]])
         let length = this.props.dates.length - 1;
+        
         this.setState(
           {
             periods: this.props.periods,
@@ -76,7 +77,7 @@ class CurrentPeriod extends Component {
           () => {
             console.log("after setting state?")
             if (this.checkDate()) {
-              this.generateTemplate();
+              this.generateTemplate(this.props.periods[this.props.dates[length]]);
             }
           }
         );
@@ -84,7 +85,7 @@ class CurrentPeriod extends Component {
     });
   }
 
-  generateTemplate() {
+  generateTemplate(employees) {
     console.log("generating template")
     let newDates = this.state.dates;
     let index = this.state.periodIndex;
@@ -94,9 +95,9 @@ class CurrentPeriod extends Component {
     console.log("adding new period date", newPeriodDate)
     newDates.push(newPeriodDate);
 
-    console.log("emps", this.props.employees)
+    console.log("emps", employees)
 
-    let newEmployees = this.props.employees.map((employee) => {
+    let newEmployees = employees.map((employee) => {
       let { addedAt, modifiedAt, ...newEmployee } = employee;
       newEmployee[KITCHEN_DAYS] = 0;
       newEmployee[CALCULATED_KITCHEN_HOURS] = '00:00';
