@@ -83,12 +83,21 @@ class CurrentPeriod extends Component {
   }
 
   generateTemplate(employees) {
-    let newDates = this.state.dates;
-    let index = this.state.periodIndex;
+    let dates = this.state.dates;
+    let currentIndex = this.state.periodIndex;
+    // dateOfFocus is the last date that had data from the db
+    let dateOfFocus = dates[currentIndex]
+
+    // Find the index of the date of focus
     let yearlyDates = this.state.yearlyDates;
-    let newPeriodDate = yearlyDates[index + 1];
-    
-    newDates.push(newPeriodDate);
+    let yearlyDatesIndex = yearlyDates.findIndex(x => x === dateOfFocus)
+
+    // Retrieve data for the next upcoming index, the upcoming period after the date of focus
+    let yearlyDatesDetails = this.props.yearlyDates;
+    let nextDateDetails = yearlyDatesDetails[yearlyDates[yearlyDatesIndex + 1]]
+
+    // Push onto dates arr the new upcoming date of focus we are generating
+    dates.push(nextDateDetails["periodStart"]);
 
     let newEmployees = employees.map((employee) => {
       let { addedAt, modifiedAt, ...newEmployee } = employee;
@@ -99,53 +108,56 @@ class CurrentPeriod extends Component {
       newEmployee[TOTAL_HOURS] = '00:00';
       newEmployee[TOTAL_HOURS_ROUNDED] = '00:00';
       newEmployee[TIPS] = 0;
-      newEmployee[PERIOD_START] = newPeriodDate;
-      newEmployee[PERIOD_END] = this.getPeriodEnd(newPeriodDate);
-      newEmployee[CHECK_DATE] = this.props.yearlyDates[newPeriodDate].checkDate;
+      newEmployee[PERIOD_START] = nextDateDetails["periodStart"];
+      newEmployee[PERIOD_END] = nextDateDetails["periodEnd"];
+      newEmployee[CHECK_DATE] = nextDateDetails["checkDate"];
 
       return newEmployee;
     });
 
-    let newPeriods = this.state.periods;
-    newPeriods[newPeriodDate] = newEmployees;
+    // Add list of new employees to updated periods array
+    let updatedPeriodsArr = this.state.periods;
+    updatedPeriodsArr[nextDateDetails["periodStart"]] = newEmployees;
 
+    // Update state with new contents
     this.setState({
-      periods: newPeriods,
+      periods: updatedPeriodsArr,
       periodIndex: this.state.periodIndex + 1,
-      dates: newDates,
+      dates: dates,
       employees: newEmployees,
       isCurrent: true,
     });
   }
 
   checkDate() {
+    let dates = this.state.dates;
     let currentIndex = this.state.periodIndex;
-    let prevDates = this.state.dates;
+    // dateOfFocus is the last date that had data from the db
+    let dateOfFocus = dates[currentIndex]
+
+    // Find the index of the date of focus
     let yearlyDates = this.state.yearlyDates;
+    let yearlyDatesIndex = yearlyDates.findIndex(x => x === dateOfFocus)
+
+    // Retrieve data for the next upcoming index, the upcoming period after the date of focus
     let yearlyDatesDetails = this.props.yearlyDates;
+    let nextDateDetails = yearlyDatesDetails[yearlyDates[yearlyDatesIndex + 1]]
 
+    // Get the upcoming date of focus
+    let upcomingDateOfFocus = nextDateDetails["periodStart"]
+
+    // Create a date object for the upcoming generate trigger date and set timezone
+    let generateDate = new Date(nextDateDetails["periodEnd"])
+    generateDate = new Date(generateDate.getTime() + generateDate.getTimezoneOffset() * 60000)
+    generateDate.setHours(0, 0, 0, 0);
+
+    // Fetch todays date
     let today = new Date()
-    let prevEndDate = new Date(this.getPeriodEnd(prevDates[currentIndex]));
-    let currentStartDate =
-      yearlyDatesDetails[yearlyDates[currentIndex + 1]].periodStart;
-    let currentEndDate = new Date(
-      yearlyDatesDetails[yearlyDates[currentIndex + 1]].periodEnd
-    );
 
-    prevEndDate = new Date(
-      prevEndDate.getTime() + prevEndDate.getTimezoneOffset() * 60000
-    );
-    currentEndDate = new Date(
-      currentEndDate.getTime() + currentEndDate.getTimezoneOffset() * 60000
-    );
-
-    prevEndDate.setHours(0, 0, 0, 0);
-    currentEndDate.setHours(0, 0, 0, 0);
-
+    // If we are past the generateDate, and the upcoming date of focus is not already in our data set
     if (
-      today.getTime() >= prevEndDate.getTime() &&
-      today.getTime() <= currentEndDate.getTime() &&
-      !has(this.state.periods, currentStartDate)
+      today.getTime() >= generateDate.getTime() &&
+      !has(this.state.periods, upcomingDateOfFocus)
     ) {
       return true;
     }
