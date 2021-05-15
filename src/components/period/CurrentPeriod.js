@@ -61,6 +61,7 @@ class CurrentPeriod extends Component {
   initializePeriod() {
     this.props.getPayPeriods().then(() => {
       this.props.getDates().then(() => {
+        console.log("here in initialize")
         let length = this.props.dates.length - 1;
         this.setState(
           {
@@ -72,6 +73,7 @@ class CurrentPeriod extends Component {
             isCurrent: true,
           },
           () => {
+            console.log("after setting state?")
             if (this.checkDate()) {
               this.generateTemplate();
             }
@@ -106,12 +108,16 @@ class CurrentPeriod extends Component {
     let newPeriods = this.state.periods;
     newPeriods[newPeriodDate] = newEmployees;
 
+    console.log("setting new state")
     this.setState({
       periods: newPeriods,
       periodIndex: this.state.periodIndex + 1,
       dates: newDates,
       employees: newEmployees,
       isCurrent: true,
+    }, 
+    () => { 
+      console.log("done setting state") 
     });
   }
 
