@@ -310,6 +310,7 @@ class CurrentPeriod extends Component {
             </button>
           </div>
         </header>
+        { console.log(this.state.employees.length) }
         {this.state.employees.length === 0 ? (
           <div className="period__load">Loading....</div>
         ) : (
