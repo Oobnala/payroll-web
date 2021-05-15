@@ -142,6 +142,11 @@ class CurrentPeriod extends Component {
     prevEndDate.setHours(0, 0, 0, 0);
     currentEndDate.setHours(0, 0, 0, 0);
 
+    console.log(today)
+    console.log(prevEndDate)
+    console.log(currentEndDate)
+    console.log(!has(this.state.periods, currentStartDate))
+    
     if (
       today.getTime() >= prevEndDate.getTime() &&
       today.getTime() <= currentEndDate.getTime() &&
