@@ -2,10 +2,11 @@ import server from '../../api/server';
 import { GET_EMPLOYEES, ADD_EMPLOYEE, EDIT_EMPLOYEE } from './types';
 
 export const getEmployees = () => async (dispatch) => {
-  await server
+  return await server
     .get('/employees')
     .then((response) => {
       dispatch({ type: GET_EMPLOYEES, payload: response.data.employees });
+      return response.data.employees
     })
     .catch((err) => {
       console.log(err);

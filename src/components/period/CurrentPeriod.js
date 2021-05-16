@@ -6,6 +6,9 @@ import {
   submit,
 } from '../../redux/actions/periodActions';
 import {
+  getEmployees
+} from '../../redux/actions/employeeActions';
+import {
   KITCHEN_DAYS,
   CALCULATED_KITCHEN_HOURS,
   SERVER_HOURS,
@@ -62,22 +65,24 @@ class CurrentPeriod extends Component {
     this.props.getPayPeriods().then(() => {
       this.props.getDates().then(() => {
         let length = this.props.dates.length - 1;
-        
-        this.setState(
-          {
-            periods: this.props.periods,
-            periodIndex: length,
+  
+        this.setState({
+          periods: this.props.periods,
+          periodIndex: length,
+          dates: this.props.dates,
+          yearlyDates: Object.keys(this.props.yearlyDates),
+          isCurrent: true,
+        })
+
+        if(this.checkDate()) {
+          this.props.getEmployees().then(employees => {
+            this.generateTemplate(employees);
+          })
+        } else {
+          this.setState({
             employees: this.props.periods[this.props.dates[length]],
-            dates: this.props.dates,
-            yearlyDates: Object.keys(this.props.yearlyDates),
-            isCurrent: true,
-          },
-          () => {
-            if (this.checkDate()) {
-              this.generateTemplate(this.props.periods[this.props.dates[length]]);
-            }
-          }
-        );
+          })
+        }
       });
     });
   }
@@ -101,6 +106,7 @@ class CurrentPeriod extends Component {
 
     let newEmployees = employees.map((employee) => {
       let { addedAt, modifiedAt, ...newEmployee } = employee;
+
       newEmployee[KITCHEN_DAYS] = 0;
       newEmployee[CALCULATED_KITCHEN_HOURS] = '00:00';
       newEmployee[SERVER_HOURS] = '00:00';
@@ -217,28 +223,38 @@ class CurrentPeriod extends Component {
     const previousDate = this.state.dates[this.state.periodIndex - 1];
     const previousEmployees = (typeof this.state.periods[previousDate] === "undefined") ? [] : this.state.periods[previousDate];
 
-    let employeesToSubmit = [...employees];
-    employeesToSubmit.map((employee) => (employee['isNew'] = false));
+    // Create a copy of employees as a Set, we dont want any dups!
+    let employeesToSubmit = new Set([...employees]);
 
-    let previousEmployeesLen = 0;
-    if (typeof previousEmployees !== "undefined") {
-      previousEmployeesLen = previousEmployees.length
-    }
+    // Set default values that all employees are not new and not removed
+    employeesToSubmit.forEach((employee) => {
+      employee['isNew'] = false
+      employee['isRemoved'] = false
+    });
 
-    if (previousEmployeesLen !== employees.length) {
-      const differences = employees.filter(
-        ({ id: id1 }) => !previousEmployees.some(({ id: id2 }) => id2 === id1)
-      );
-      const commons = employees.filter(({ id: id1 }) =>
-        previousEmployees.some(({ id: id2 }) => id2 === id1)
-      );
+    // Find additions and removals
+    const additionsToEmployees = employees.filter(
+      ({ id: id1 }) => !previousEmployees.some(({ id: id2 }) => id2 === id1)
+    );
+    const removalsFromEmployees = previousEmployees.filter(
+      ({ id: id1 }) => !employees.some(({ id: id2 }) => id2 === id1)
+    );
 
-      differences.map((employee) => (employee['isNew'] = true));
+    // for every new addition, set isNew true and add to employeesToSubmit
+    additionsToEmployees.map((employee) => {
+      employee['isNew'] = true
+      employee['isRemoved'] = false
+      employeesToSubmit.add(employee)
+    });
 
-      employeesToSubmit = commons.concat(differences);
-    }
+    // for every removal, set isRemoved to true
+    removalsFromEmployees.map((employee) => {
+      employee['isNew'] = false
+      employee['isRemoved'] = true
+      employeesToSubmit.add(employee)
+    });
 
-    this.props.submit(employeesToSubmit);
+    this.props.submit(Array.from(employeesToSubmit));
   }
 
   renderTableHeaders() {
@@ -346,6 +362,6 @@ const mapStateToProps = (state) => ({
   employees: state.employee.employees,
 });
 
-export default connect(mapStateToProps, { getPayPeriods, getDates, submit })(
+export default connect(mapStateToProps, { getPayPeriods, getDates, submit, getEmployees })(
   CurrentPeriod
 );
