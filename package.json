@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.1",
+    "aws-sdk": "^2.907.0",
     "axios": "^0.21.1",
     "camelcase": "^6.2.0",
     "dotenv": "^8.2.0",
@@ -16,6 +17,7 @@
     "node-sass": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-pdf": "^5.3.0",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
@@ -26,15 +28,13 @@
     "web-vitals": "^1.1.0"
   },
   "scripts": {
-    "start": "NODE_ENV=production react-scripts start",
-    "dev": "NODE_ENV=development react-scripts start",
+    "start": "react-scripts start",
+    "test-s3": "AWS_ACCESS_KEY=AKIA2WLUAM5KKYFQUCNR AWS_SECRET_KEY=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 node ./src/redux/actions/submitActions.js",
     "build": "NODE_ENV=production PORT=80 react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-
-  "homepage":".",
-
+  "homepage": ".",
   "eslintConfig": {
     "extends": [
       "react-app",

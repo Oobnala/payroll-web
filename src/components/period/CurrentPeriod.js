@@ -6,6 +6,9 @@ import {
   submit,
 } from '../../redux/actions/periodActions';
 import {
+  getDataFromAWS
+} from '../../redux/actions/submitActions';
+import {
   getEmployees
 } from '../../redux/actions/employeeActions';
 import {
@@ -255,6 +258,20 @@ class CurrentPeriod extends Component {
     });
 
     this.props.submit(Array.from(employeesToSubmit));
+
+    // TODO
+    // Add an isSubmited status to recognize state
+    // Render a modal after a submit
+    // Modal can have loading state as it tries and retries to fetch file at S3
+    // On retrieval of file
+    // Render in pdf viewer within the modal?
+    // Button to cancel
+    // Button to email
+    // Button to download?
+    // On any of these button clicks, do the action then set isSubmitted to false
+    let pdfBufferData = getDataFromAWS("chao-praya-time-sheets", "2021-05-01-TimeSheet.pdf")
+    console.log('in currentperiods', pdfBufferData)
+
   }
 
   renderTableHeaders() {
