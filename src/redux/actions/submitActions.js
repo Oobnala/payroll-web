@@ -7,7 +7,6 @@ AWS.config.update(
 );
 var s3 = new AWS.S3();
 
-
 let retryCounter = 0
 
 export const getDataFromAWS = (bucketName, fileName) => {

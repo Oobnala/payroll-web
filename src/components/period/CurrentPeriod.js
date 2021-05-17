@@ -269,8 +269,9 @@ class CurrentPeriod extends Component {
     // Button to email
     // Button to download?
     // On any of these button clicks, do the action then set isSubmitted to false
+    console.log("attempt to get from aws")
     let pdfBufferData = getDataFromAWS("chao-praya-time-sheets", "2021-05-01-TimeSheet.pdf")
-    console.log('in currentperiods', pdfBufferData)
+    alert(`in currentperiods ${pdfBufferData}`)
 
   }
 
