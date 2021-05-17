@@ -25,7 +25,7 @@ export const getDates = () => async (dispatch) => {
 
 export const submit = (employees) => async (dispatch) => {
   await server
-    .post('submit', { employees: employees })
+    .post('submit', { employees: employees }, { timeout: 20000 })
     .then((response) => {
       console.log(response);
       dispatch({ type: SUBMIT });
