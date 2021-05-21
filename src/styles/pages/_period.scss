@@ -146,9 +146,10 @@
   display: flex;
   justify-content: space-around;
   width: 60rem;
-  padding: 1rem;
+  padding: 0.5rem;
   background-color: $color-dark-gray;
   border-radius: 1rem;
+  box-shadow: 5px 4px 5px rgb(32, 31, 31);
 
   &__column {
     display: flex;
@@ -159,5 +160,32 @@
 
   &__header {
     margin-bottom: 1rem;
+  }
+
+  &__input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    p {
+      margin-right: 0rem;
+    }
+  }
+
+  &__clear {
+    border: none;
+    background-color: $color-primary;
+    color: white;
+    height: 3rem;
+    width: 6.5rem;
+    border-radius: 1rem;
+
+    &:hover {
+      background-color: $color-primary-secondary;
+    }
+
+    &:active {
+      transform: translateY(2px);
+    }
   }
 }
