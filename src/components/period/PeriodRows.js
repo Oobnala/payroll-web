@@ -10,6 +10,11 @@ import {
   TOTAL_HOURS,
   TOTAL_HOURS_ROUNDED,
   TIPS,
+  CASH_PERCENTAGE,
+  MISC,
+  TOTAL_PAY_NEEDED,
+  CASH_PAYOUT,
+  CHECK_PAYOUT,
 } from './properties';
 import {
   calculateKitchenHours,
@@ -54,6 +59,20 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
 
         setEmployeeValue(TOTAL_HOURS, summedTimes);
         setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
+        break;
+      }
+
+      case CASH_PERCENTAGE: {
+        // CASH PERCENTAGE calculation function here. Add function to calculations.js
+        // Use property.js consants.
+        console.log('Cash Percentage: ' + value);
+        break;
+      }
+
+      case MISC: {
+        // MISC calculations here. Add function to calculations.js
+        // Use property.js consants
+        console.log('Misc: ' + value);
         break;
       }
 
@@ -119,6 +138,41 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
               : 0
           }
           name={KITCHEN_DAYS}
+          onChange={handleOnChange}
+          disabled={!isCurrent}
+        />
+      </td>
+      <td>
+        {currentEmployee.totalPayNeeded !== null
+          ? currentEmployee.totalPayNeeded
+          : '$0.00'}
+      </td>
+      <td>
+        <input
+          className="period__tinput"
+          type="number"
+          value={
+            currentEmployee.cashPercentage !== null
+              ? currentEmployee.cashPercentage
+              : '0'
+          }
+          name={CASH_PERCENTAGE}
+          onChange={handleOnChange}
+          disabled={!isCurrent}
+        />
+      </td>
+      <td>
+        {currentEmployee.cashPayout !== null ? currentEmployee.cashPayout : 0}
+      </td>
+      <td>
+        {currentEmployee.checkPayout !== null ? currentEmployee.checkPayout : 0}
+      </td>
+      <td>
+        <input
+          className="period__tinput"
+          type="text"
+          value={currentEmployee.misc !== null ? currentEmployee.misc : '00:00'}
+          name={MISC}
           onChange={handleOnChange}
           disabled={!isCurrent}
         />
