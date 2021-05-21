@@ -8,3 +8,9 @@ export const TIPS = 'tips';
 export const PERIOD_START = 'periodStart';
 export const PERIOD_END = 'periodEnd';
 export const CHECK_DATE = 'checkDate';
+
+export const TOTAL_PAY_NEEDED = 'totalPayNeeded';
+export const CASH_PERCENTAGE = 'cashPercentage';
+export const CASH_PAYOUT = 'cashPayout';
+export const CHECK_PAYOUT = 'checkPayout';
+export const MISC = 'misc';
