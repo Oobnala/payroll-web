@@ -6,6 +6,25 @@ import {
   CASH_PERCENTAGE,
 } from './properties';
 
+const calculatePayForXHours = (totalHours, hourlyRate) => {
+  let totalHoursSplit = totalHours.split(":")
+
+  if (totalHoursSplit.length === 0) return 0;
+
+  const totalHoursNumOfHours = totalHoursSplit[0]
+  const totalHoursNumOfMins = totalHoursSplit[1]
+
+  const dollarAmountHours =  totalHoursNumOfHours * hourlyRate
+  const dollarAmountMinutes = (totalHoursNumOfMins / 60) * hourlyRate
+  const totalDollarAmount = dollarAmountHours + dollarAmountMinutes
+
+  return totalDollarAmount
+}
+
+const calculatePercentNeeded = (payForXHours, totalPayNeeded) => {
+  return (100 - (payForXHours/totalPayNeeded) * 100).toFixed(4)
+}
+
 const Calculator = () => {
   const [totalHours, setTotalHours] = useState('00:00');
   const [hourlyRate, setHourlyRate] = useState('0');
@@ -20,14 +39,17 @@ const Calculator = () => {
     switch (name) {
       case TOTAL_HOURS: {
         setTotalHours(value);
+        setCashPercentage(calculatePercentNeeded(calculatePayForXHours(value, hourlyRate), totalPayNeeded))
         break;
       }
       case HOURLY_RATE: {
         setHourlyRate(value);
+        setCashPercentage(calculatePercentNeeded(calculatePayForXHours(totalHours, value), totalPayNeeded))
         break;
       }
       case TOTAL_PAY_NEEDED: {
         setTotalPayNeeded(value);
+        setCashPercentage(calculatePercentNeeded(calculatePayForXHours(totalHours, hourlyRate), value))
         break;
       }
       case CASH_PERCENTAGE: {
@@ -46,16 +68,6 @@ const Calculator = () => {
 
   return (
     <div className="calculator">
-      <div className="calculator__column">
-        <h2 className="calculator__header">Total Hours</h2>
-        <input
-          className="period__tinput"
-          type="text"
-          value={totalHours}
-          name={TOTAL_HOURS}
-          onChange={handleOnChange}
-        />
-      </div>
       <div className="calculator__column">
         <h2 className="calculator__header">Hourly Rate</h2>
         <div className="calculator__input">
@@ -81,6 +93,16 @@ const Calculator = () => {
             onChange={handleOnChange}
           />
         </div>
+      </div>
+      <div className="calculator__column">
+        <h2 className="calculator__header">Hours Wanted</h2>
+        <input
+          className="period__tinput"
+          type="text"
+          value={totalHours}
+          name={TOTAL_HOURS}
+          onChange={handleOnChange}
+        />
       </div>
       <div className="calculator__column">
         <h2 className="calculator__header">Percent Needed</h2>

@@ -18,6 +18,9 @@ import {
 } from './properties';
 import {
   calculateKitchenHours,
+  calculateTotalPayNeeded,
+  calculateCashPayout,
+  calculateCheckPayout,
   cleanValue,
   addTimes,
   roundToNearestQuarter,
@@ -42,20 +45,32 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         setEmployeeValue(KITCHEN_DAYS, value);
 
         let kitchenDayRate = employee.kitchenDayRate;
-        let hourlyRate = employee.hourlyRate;
 
+        let totalPayNeeded = calculateTotalPayNeeded(kitchenDayRate, value)
+        setEmployeeValue(TOTAL_PAY_NEEDED, totalPayNeeded)
+
+        let cashPercentage = employee.cashPercentage
+
+        //  Set Cash Payout
+        let cashPayout = calculateCashPayout(cashPercentage, totalPayNeeded)
+        setEmployeeValue(CASH_PAYOUT, cashPayout)
+
+        // Set Check Payout
+        let checkPayout = calculateCheckPayout(cashPercentage, totalPayNeeded)
+        setEmployeeValue(CHECK_PAYOUT,  checkPayout)
+
+        let hourlyRate = employee.hourlyRate;
         // Set new kitchen hours
         let kitchenHours = calculateKitchenHours(
-          kitchenDayRate,
-          hourlyRate,
-          value
+          checkPayout,
+          hourlyRate
         );
-
         setEmployeeValue(CALCULATED_KITCHEN_HOURS, kitchenHours);
 
-        // Set new Total
         let serverHours = cleanValue(employee.serverHours);
-        let summedTimes = addTimes(serverHours, kitchenHours);
+        let miscHours = cleanValue(employee.misc)
+        // Set total hours
+        let summedTimes = addTimes(addTimes(serverHours, kitchenHours), miscHours);
 
         setEmployeeValue(TOTAL_HOURS, summedTimes);
         setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
@@ -63,28 +78,60 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
       }
 
       case CASH_PERCENTAGE: {
-        // CASH PERCENTAGE calculation function here. Add function to calculations.js
-        // Use property.js consants.
-        console.log('Cash Percentage: ' + value);
+        setEmployeeValue(CASH_PERCENTAGE, value);
+
+        let totalPayNeeded = employee.totalPayNeeded
+
+        // Set Cash Payout
+        let cashPayout = calculateCashPayout(value, totalPayNeeded)
+        setEmployeeValue(CASH_PAYOUT, cashPayout)
+
+        // Set Check Payout
+        let checkPayout = calculateCheckPayout(value, totalPayNeeded)
+        setEmployeeValue(CHECK_PAYOUT,  checkPayout)
+
+        let hourlyRate = employee.hourlyRate;
+
+        // Set new kitchen hours
+        let kitchenHours = calculateKitchenHours(
+          checkPayout,
+          hourlyRate
+        );
+        setEmployeeValue(CALCULATED_KITCHEN_HOURS, kitchenHours);
+
+        let serverHours = cleanValue(employee.serverHours);
+        let miscHours = cleanValue(employee.misc)
+        // Set total hours
+        let summedTimes = addTimes(addTimes(serverHours, kitchenHours), miscHours);
+
+        setEmployeeValue(TOTAL_HOURS, summedTimes);
+        setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
         break;
       }
 
       case MISC: {
-        // MISC calculations here. Add function to calculations.js
-        // Use property.js consants
-        console.log('Misc: ' + value);
+        setEmployeeValue(MISC, value);
+        
+        let kitchenHours = cleanValue(employee.calculatedKitchenHours)
+        let serverHours = cleanValue(employee.serverHours);
+        let miscHours = cleanValue(value)
+
+        // Set total hours
+        let summedTimes = addTimes(addTimes(serverHours, kitchenHours), miscHours);
+        setEmployeeValue(TOTAL_HOURS, summedTimes);
+        setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
         break;
       }
 
       case SERVER_HOURS: {
         setEmployeeValue(SERVER_HOURS, value);
 
-        value = cleanValue(value);
-
-        // Set total
+        let serverHours = cleanValue(value);
         let kitchenHours = cleanValue(employee.calculatedKitchenHours);
-        let summedTimes = addTimes(value, kitchenHours);
+        let miscHours = cleanValue(employee.misc)
 
+        // Set total hours
+        let summedTimes = addTimes(addTimes(serverHours, kitchenHours), miscHours);
         setEmployeeValue(TOTAL_HOURS, summedTimes);
         setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
         break;

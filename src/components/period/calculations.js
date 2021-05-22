@@ -1,3 +1,5 @@
+import { CASH_PERCENTAGE, TOTAL_PAY_NEEDED } from "./properties";
+
 export const padTime = (time) => {
   if (parseInt(time) < 10) {
     time = '0' + time.toString();
@@ -72,14 +74,10 @@ export const cleanValue = (value) => {
 };
 
 export const calculateKitchenHours = (
-  kitchenDayRate,
-  hourlyRate,
-  kitchenDays
+  checkPayout,
+  hourlyRate
 ) => {
-  let hoursWorkedDecimal = (
-    (kitchenDays * kitchenDayRate) /
-    hourlyRate
-  ).toFixed(2);
+  let hoursWorkedDecimal = (checkPayout / hourlyRate).toFixed(2);
   let hoursWorkedSplitArr = hoursWorkedDecimal.toString().split('.');
 
   let hours = 0;
@@ -90,4 +88,25 @@ export const calculateKitchenHours = (
   }
 
   return `${hours}:${padTime(mins)}`;
+
 };
+
+export const calculateTotalPayNeeded = (kitchenDayRate, kitchenDays) => {
+  return (kitchenDays * kitchenDayRate).toFixed(2)
+}
+
+export const calculateCashPayout = (cashPercentage, totalPayNeeded) => {
+  if (typeof cashPercentage === 'undefined') {
+    cashPercentage = 0
+  }
+
+  return (totalPayNeeded * (cashPercentage * 0.01)).toFixed(2)
+}
+
+export const calculateCheckPayout = (cashPercentage, totalPayNeeded) => { 
+  if (typeof cashPercentage === 'undefined') {
+    cashPercentage = 0
+  }
+
+  return (totalPayNeeded *  ((100 - cashPercentage) *  0.01)).toFixed(2)
+}
