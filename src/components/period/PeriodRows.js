@@ -191,8 +191,8 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
       </td>
       <td>
         {currentEmployee.totalPayNeeded !== null
-          ? currentEmployee.totalPayNeeded
-          : '$0.00'}
+          ? currentEmployee.totalPayNeeded.toFixed(2)
+          : (0).toFixed(2)}
       </td>
       <td>
         <input
@@ -209,10 +209,10 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         />
       </td>
       <td>
-        {currentEmployee.cashPayout !== null ? currentEmployee.cashPayout : 0}
+        {currentEmployee.cashPayout !== null ? currentEmployee.cashPayout.toFixed(2) : (0).toFixed(2)}
       </td>
       <td>
-        {currentEmployee.checkPayout !== null ? currentEmployee.checkPayout : 0}
+        {currentEmployee.checkPayout !== null ? currentEmployee.checkPayout.toFixed(2) : (0).toFixed(2)}
       </td>
       <td>
         <input
