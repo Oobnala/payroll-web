@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-const SubmitModal = ({ pdf, handleCloseModal, startDate, endDate }) => {
+const SubmitModal = ({
+  pdf,
+  handleCloseModal,
+  startDateUnformatted,
+  startDate,
+  endDate,
+}) => {
   const [loading, setLoading] = useState(true);
   const [pdfURL, setPdfURL] = useState('');
 
@@ -34,9 +40,11 @@ const SubmitModal = ({ pdf, handleCloseModal, startDate, endDate }) => {
           <button className="modal__btn" onClick={handleCloseModal}>
             Email
           </button>
-          <button className="modal__btn" onClick={handleCloseModal}>
-            Download
-          </button>
+          <a href={pdf} download={`${startDateUnformatted}-TimeSheet.pdf`}>
+            <button className="modal__btn" onClick={handleCloseModal}>
+              Download
+            </button>
+          </a>
         </div>
       </div>
     </div>
