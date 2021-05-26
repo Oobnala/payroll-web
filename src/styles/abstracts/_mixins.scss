@@ -1,0 +1,38 @@
+@mixin buttonPrimary {
+  border: none;
+  background-color: $color-primary;
+  color: white;
+  height: 3rem;
+  border-radius: 1rem;
+
+  &:hover {
+    background-color: $color-primary-secondary;
+  }
+
+  &:active {
+    transform: translateY(2px);
+  }
+}
+
+@mixin input {
+  background: none;
+  border: none;
+  outline: none;
+  color: $color-off-white;
+  width: 7rem;
+  transition: 0.3s;
+  text-align: center;
+
+  &:focus,
+  &:active {
+    padding-left: 2px;
+    border-radius: 0.5rem;
+    border: 2px solid $color-primary;
+  }
+
+  &:hover:not(:focus) {
+    padding-left: 2px;
+    border-radius: 0.5rem;
+    border: 2px solid $color-primary-secondary;
+  }
+}
