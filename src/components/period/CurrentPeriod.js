@@ -27,6 +27,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PeriodRow from './PeriodRows';
 import Calculator from './Calculator';
+import SubmitModal from './SubmitModal';
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { formatDate } from './helpers';
 import { has } from 'lodash';
@@ -41,10 +42,13 @@ class CurrentPeriod extends Component {
       dates: [],
       yearlyDates: [],
       isCurrent: true,
+      isSubmitted: false,
+      pdfURL: '',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUpdateEmployee = this.handleUpdateEmployee.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   componentDidMount() {
@@ -225,6 +229,12 @@ class CurrentPeriod extends Component {
     });
   }
 
+  handleCloseModal() {
+    this.setState({
+      isSubmitted: false,
+    });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     alert('Employee data has been submitted');
@@ -283,8 +293,17 @@ class CurrentPeriod extends Component {
     // While submit has been clicked, gray out until response has returned ~20 secs
 
     // Fetches data from aws
-    // console.log("attempt to get from aws")
-    // getDataFromAWS("chao-praya-time-sheets", "2021-05-01-TimeSheet.pdf").then((res) => console.log(res))
+    console.log('attempt to get from aws');
+    getDataFromAWS('chao-praya-time-sheets', '2021-05-01-TimeSheet.pdf').then(
+      (res) => {
+        let blob = new Blob([res], { type: 'application/pdf' });
+        let blobURL = URL.createObjectURL(blob);
+        this.setState({
+          pdfURL: blobURL,
+          isSubmitted: true,
+        });
+      }
+    );
   }
 
   renderTableHeaders() {
@@ -389,6 +408,16 @@ class CurrentPeriod extends Component {
           )}
         </div>
         <Calculator />
+        {this.state.isSubmitted && (
+          <SubmitModal
+            startDate={formatDate(this.state.dates[this.state.periodIndex])}
+            endDate={formatDate(
+              this.getPeriodEnd(this.state.dates[this.state.periodIndex])
+            )}
+            pdf={this.state.pdfURL}
+            handleCloseModal={this.handleCloseModal}
+          />
+        )}
       </div>
     );
   }

@@ -7,23 +7,23 @@ import {
 } from './properties';
 
 const calculatePayForXHours = (totalHours, hourlyRate) => {
-  let totalHoursSplit = totalHours.split(":")
+  let totalHoursSplit = totalHours.split(':');
 
   if (totalHoursSplit.length === 0) return 0;
 
-  const totalHoursNumOfHours = totalHoursSplit[0]
-  const totalHoursNumOfMins = totalHoursSplit[1]
+  const totalHoursNumOfHours = totalHoursSplit[0];
+  const totalHoursNumOfMins = totalHoursSplit[1];
 
-  const dollarAmountHours =  totalHoursNumOfHours * hourlyRate
-  const dollarAmountMinutes = (totalHoursNumOfMins / 60) * hourlyRate
-  const totalDollarAmount = dollarAmountHours + dollarAmountMinutes
+  const dollarAmountHours = totalHoursNumOfHours * hourlyRate;
+  const dollarAmountMinutes = (totalHoursNumOfMins / 60) * hourlyRate;
+  const totalDollarAmount = dollarAmountHours + dollarAmountMinutes;
 
-  return totalDollarAmount
-}
+  return totalDollarAmount;
+};
 
 const calculatePercentNeeded = (payForXHours, totalPayNeeded) => {
-  return (100 - (payForXHours/totalPayNeeded) * 100).toFixed(4)
-}
+  return (100 - (payForXHours / totalPayNeeded) * 100).toFixed(4);
+};
 
 const Calculator = () => {
   const [totalHours, setTotalHours] = useState('00:00');
@@ -39,17 +39,32 @@ const Calculator = () => {
     switch (name) {
       case TOTAL_HOURS: {
         setTotalHours(value);
-        setCashPercentage(calculatePercentNeeded(calculatePayForXHours(value, hourlyRate), totalPayNeeded))
+        setCashPercentage(
+          calculatePercentNeeded(
+            calculatePayForXHours(value, hourlyRate),
+            totalPayNeeded
+          )
+        );
         break;
       }
       case HOURLY_RATE: {
         setHourlyRate(value);
-        setCashPercentage(calculatePercentNeeded(calculatePayForXHours(totalHours, value), totalPayNeeded))
+        setCashPercentage(
+          calculatePercentNeeded(
+            calculatePayForXHours(totalHours, value),
+            totalPayNeeded
+          )
+        );
         break;
       }
       case TOTAL_PAY_NEEDED: {
         setTotalPayNeeded(value);
-        setCashPercentage(calculatePercentNeeded(calculatePayForXHours(totalHours, hourlyRate), value))
+        setCashPercentage(
+          calculatePercentNeeded(
+            calculatePayForXHours(totalHours, hourlyRate),
+            value
+          )
+        );
         break;
       }
       case CASH_PERCENTAGE: {
@@ -73,7 +88,7 @@ const Calculator = () => {
         <div className="calculator__input">
           <p>$</p>
           <input
-            className="period__tinput"
+            className="calculator__cinput"
             type="number"
             value={hourlyRate}
             name={HOURLY_RATE}
@@ -86,7 +101,7 @@ const Calculator = () => {
         <div className="calculator__input">
           <p>$</p>
           <input
-            className="period__tinput"
+            className="calculator__cinput"
             type="number"
             value={totalPayNeeded}
             name={TOTAL_PAY_NEEDED}
@@ -97,7 +112,7 @@ const Calculator = () => {
       <div className="calculator__column">
         <h2 className="calculator__header">Hours Wanted</h2>
         <input
-          className="period__tinput"
+          className="calculator__cinput"
           type="text"
           value={totalHours}
           name={TOTAL_HOURS}
@@ -107,7 +122,7 @@ const Calculator = () => {
       <div className="calculator__column">
         <h2 className="calculator__header">Percent Needed</h2>
         <input
-          className="period__tinput"
+          className="calculator__cinput"
           type="number"
           value={cashPercentage}
           name={CASH_PERCENTAGE}

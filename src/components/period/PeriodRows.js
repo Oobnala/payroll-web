@@ -46,31 +46,31 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
 
         let kitchenDayRate = employee.kitchenDayRate;
 
-        let totalPayNeeded = calculateTotalPayNeeded(kitchenDayRate, value)
-        setEmployeeValue(TOTAL_PAY_NEEDED, totalPayNeeded)
+        let totalPayNeeded = calculateTotalPayNeeded(kitchenDayRate, value);
+        setEmployeeValue(TOTAL_PAY_NEEDED, totalPayNeeded);
 
-        let cashPercentage = employee.cashPercentage
+        let cashPercentage = employee.cashPercentage;
 
         //  Set Cash Payout
-        let cashPayout = calculateCashPayout(cashPercentage, totalPayNeeded)
-        setEmployeeValue(CASH_PAYOUT, cashPayout)
+        let cashPayout = calculateCashPayout(cashPercentage, totalPayNeeded);
+        setEmployeeValue(CASH_PAYOUT, cashPayout);
 
         // Set Check Payout
-        let checkPayout = calculateCheckPayout(cashPercentage, totalPayNeeded)
-        setEmployeeValue(CHECK_PAYOUT,  checkPayout)
+        let checkPayout = calculateCheckPayout(cashPercentage, totalPayNeeded);
+        setEmployeeValue(CHECK_PAYOUT, checkPayout);
 
         let hourlyRate = employee.hourlyRate;
         // Set new kitchen hours
-        let kitchenHours = calculateKitchenHours(
-          checkPayout,
-          hourlyRate
-        );
+        let kitchenHours = calculateKitchenHours(checkPayout, hourlyRate);
         setEmployeeValue(CALCULATED_KITCHEN_HOURS, kitchenHours);
 
         let serverHours = cleanValue(employee.serverHours);
-        let miscHours = cleanValue(employee.misc)
+        let miscHours = cleanValue(employee.misc);
         // Set total hours
-        let summedTimes = addTimes(addTimes(serverHours, kitchenHours), miscHours);
+        let summedTimes = addTimes(
+          addTimes(serverHours, kitchenHours),
+          miscHours
+        );
 
         setEmployeeValue(TOTAL_HOURS, summedTimes);
         setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
@@ -80,29 +80,29 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
       case CASH_PERCENTAGE: {
         setEmployeeValue(CASH_PERCENTAGE, value);
 
-        let totalPayNeeded = employee.totalPayNeeded
+        let totalPayNeeded = employee.totalPayNeeded;
 
         // Set Cash Payout
-        let cashPayout = calculateCashPayout(value, totalPayNeeded)
-        setEmployeeValue(CASH_PAYOUT, cashPayout)
+        let cashPayout = calculateCashPayout(value, totalPayNeeded);
+        setEmployeeValue(CASH_PAYOUT, cashPayout);
 
         // Set Check Payout
-        let checkPayout = calculateCheckPayout(value, totalPayNeeded)
-        setEmployeeValue(CHECK_PAYOUT,  checkPayout)
+        let checkPayout = calculateCheckPayout(value, totalPayNeeded);
+        setEmployeeValue(CHECK_PAYOUT, checkPayout);
 
         let hourlyRate = employee.hourlyRate;
 
         // Set new kitchen hours
-        let kitchenHours = calculateKitchenHours(
-          checkPayout,
-          hourlyRate
-        );
+        let kitchenHours = calculateKitchenHours(checkPayout, hourlyRate);
         setEmployeeValue(CALCULATED_KITCHEN_HOURS, kitchenHours);
 
         let serverHours = cleanValue(employee.serverHours);
-        let miscHours = cleanValue(employee.misc)
+        let miscHours = cleanValue(employee.misc);
         // Set total hours
-        let summedTimes = addTimes(addTimes(serverHours, kitchenHours), miscHours);
+        let summedTimes = addTimes(
+          addTimes(serverHours, kitchenHours),
+          miscHours
+        );
 
         setEmployeeValue(TOTAL_HOURS, summedTimes);
         setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
@@ -111,13 +111,16 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
 
       case MISC: {
         setEmployeeValue(MISC, value);
-        
-        let kitchenHours = cleanValue(employee.calculatedKitchenHours)
+
+        let kitchenHours = cleanValue(employee.calculatedKitchenHours);
         let serverHours = cleanValue(employee.serverHours);
-        let miscHours = cleanValue(value)
+        let miscHours = cleanValue(value);
 
         // Set total hours
-        let summedTimes = addTimes(addTimes(serverHours, kitchenHours), miscHours);
+        let summedTimes = addTimes(
+          addTimes(serverHours, kitchenHours),
+          miscHours
+        );
         setEmployeeValue(TOTAL_HOURS, summedTimes);
         setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
         break;
@@ -128,10 +131,13 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
 
         let serverHours = cleanValue(value);
         let kitchenHours = cleanValue(employee.calculatedKitchenHours);
-        let miscHours = cleanValue(employee.misc)
+        let miscHours = cleanValue(employee.misc);
 
         // Set total hours
-        let summedTimes = addTimes(addTimes(serverHours, kitchenHours), miscHours);
+        let summedTimes = addTimes(
+          addTimes(serverHours, kitchenHours),
+          miscHours
+        );
         setEmployeeValue(TOTAL_HOURS, summedTimes);
         setEmployeeValue(TOTAL_HOURS_ROUNDED, summedTimes);
         break;
@@ -190,6 +196,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         />
       </td>
       <td>
+        ${' '}
         {currentEmployee.totalPayNeeded !== null
           ? currentEmployee.totalPayNeeded.toFixed(2)
           : (0).toFixed(2)}
@@ -209,10 +216,16 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         />
       </td>
       <td>
-        {currentEmployee.cashPayout !== null ? currentEmployee.cashPayout.toFixed(2) : (0).toFixed(2)}
+        ${' '}
+        {currentEmployee.cashPayout !== null
+          ? currentEmployee.cashPayout.toFixed(2)
+          : (0).toFixed(2)}
       </td>
       <td>
-        {currentEmployee.checkPayout !== null ? currentEmployee.checkPayout.toFixed(2) : (0).toFixed(2)}
+        ${' '}
+        {currentEmployee.checkPayout !== null
+          ? currentEmployee.checkPayout.toFixed(2)
+          : (0).toFixed(2)}
       </td>
       <td>
         <input
