@@ -196,10 +196,13 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         />
       </td>
       <td>
-        ${' '}
-        {currentEmployee.totalPayNeeded !== null
-          ? currentEmployee.totalPayNeeded.toFixed(2)
-          : (0).toFixed(2)}
+        <div className="period__tinput--cash">
+          <p>$</p>
+          {currentEmployee.totalPayNeeded !== null &&
+          currentEmployee.totalPayNeeded !== 0
+            ? currentEmployee.totalPayNeeded
+            : (0).toFixed(2)}
+        </div>
       </td>
       <td>
         <input
@@ -216,16 +219,22 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         />
       </td>
       <td>
-        ${' '}
-        {currentEmployee.cashPayout !== null
-          ? currentEmployee.cashPayout.toFixed(2)
-          : (0).toFixed(2)}
+        <div className="period__tinput--cash">
+          <p>$</p>
+          {currentEmployee.cashPayout !== null &&
+          currentEmployee.cashPayout !== 0
+            ? currentEmployee.cashPayout
+            : (0).toFixed(2)}
+        </div>
       </td>
       <td>
-        ${' '}
-        {currentEmployee.checkPayout !== null
-          ? currentEmployee.checkPayout.toFixed(2)
-          : (0).toFixed(2)}
+        <div className="period__tinput--cash">
+          <p>$</p>
+          {currentEmployee.checkPayout !== null &&
+          currentEmployee.checkPayout !== 0
+            ? currentEmployee.checkPayout
+            : (0).toFixed(2)}
+        </div>
       </td>
       <td>
         <input

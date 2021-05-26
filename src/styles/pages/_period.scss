@@ -130,6 +130,15 @@
   &__tinput {
     font-size: inherit;
     @include input;
+
+    &--cash {
+      display: flex;
+      flex-direction: row;
+
+      p {
+        margin-right: 0.5rem;
+      }
+    }
   }
 
   &__history {
