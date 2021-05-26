@@ -237,7 +237,6 @@ class CurrentPeriod extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    alert('Employee data has been submitted');
 
     const { employees } = this.state;
     const previousDate = this.state.dates[this.state.periodIndex - 1];
@@ -294,16 +293,17 @@ class CurrentPeriod extends Component {
 
     // Fetches data from aws
     console.log('attempt to get from aws');
-    getDataFromAWS('chao-praya-time-sheets', '2021-05-01-TimeSheet.pdf').then(
-      (res) => {
-        let blob = new Blob([res], { type: 'application/pdf' });
-        let blobURL = URL.createObjectURL(blob);
-        this.setState({
-          pdfURL: blobURL,
-          isSubmitted: true,
-        });
-      }
-    );
+    getDataFromAWS(
+      'chao-praya-time-sheets',
+      `${this.state.dates[this.state.periodIndex]}-TimeSheet.pdf`
+    ).then((res) => {
+      let blob = new Blob([res], { type: 'application/pdf' });
+      let blobURL = URL.createObjectURL(blob);
+      this.setState({
+        pdfURL: blobURL,
+        isSubmitted: true,
+      });
+    });
   }
 
   renderTableHeaders() {
@@ -410,6 +410,7 @@ class CurrentPeriod extends Component {
         <Calculator />
         {this.state.isSubmitted && (
           <SubmitModal
+            startDateUnformatted={this.state.dates[this.state.periodIndex]}
             startDate={formatDate(this.state.dates[this.state.periodIndex])}
             endDate={formatDate(
               this.getPeriodEnd(this.state.dates[this.state.periodIndex])
