@@ -291,6 +291,7 @@ class CurrentPeriod extends Component {
       bucketName,
       `${this.state.dates[this.state.periodIndex]}-TimeSheet.pdf`
     ).then((res) => {
+      console.log("res from aws", res)
       let blob = new Blob([res], { type: 'application/pdf' });
       let blobURL = URL.createObjectURL(blob);
       this.setState({
