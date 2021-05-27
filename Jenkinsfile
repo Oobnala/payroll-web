@@ -10,8 +10,7 @@ pipeline {
         stage("Build") {
             steps {
                 sh "sudo npm install"
-                
-                sh "for l in $(cat ~/.env); do export $l ; done && sudo npm run build"
+                sh "sudo npm run build"
             }
         }
         stage("Deploy") {
