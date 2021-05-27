@@ -32,12 +32,11 @@ import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { formatDate } from './helpers';
 import { has } from 'lodash';
 
-let bucketName = ''
+let bucketName
 if (typeof process.env.REACT_APP_AWS_BUCKET_NAME === 'undefined') {
   console.error("ENV VAR BUCKET NAME NOT SET")
 } else {
   bucketName = process.env.REACT_APP_AWS_BUCKET_NAME
-  console.log("bucket name", bucketName)
 }
 
 class CurrentPeriod extends Component {
