@@ -29,7 +29,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "test-s3": "AWS_ACCESS_KEY=AKIA2WLUAM5KKYFQUCNR AWS_SECRET_KEY=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 node ./src/redux/actions/submitActions.js",
     "build": "NODE_ENV=production PORT=80 react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
