@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "for l in $(cat .env); do export $l ; done && react-scripts start",
-    "build": "for l in $(cat ~/.env); do export $l ; done && PORT=80 react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -1,5 +1,11 @@
 pipeline {
      agent any
+     environment {
+        REACT_APP_AWS_ACCESS_KEY = credentials('payroll-aws-access-key')
+        REACT_APP_AWS_SECRET_KEY = credentials('payroll-aws-secret-key')
+        REACT_APP_AWS_BUCKET_NAME = credentials('payroll-aws-bucket-name')
+        PORT=80
+    }
      stages {
         stage("Build") {
             steps {
