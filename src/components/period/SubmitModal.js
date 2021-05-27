@@ -6,9 +6,15 @@ const SubmitModal = ({
   startDateUnformatted,
   startDate,
   endDate,
+  emailPDF,
 }) => {
   const [loading, setLoading] = useState(true);
   const [pdfURL, setPdfURL] = useState('');
+
+  const sendEmail = () => {
+    emailPDF(startDateUnformatted);
+    handleCloseModal();
+  };
 
   useEffect(() => {
     if (pdfURL !== '') {
@@ -37,7 +43,7 @@ const SubmitModal = ({
           <button className="modal__btn" onClick={handleCloseModal}>
             Cancel
           </button>
-          <button className="modal__btn" onClick={handleCloseModal}>
+          <button className="modal__btn" onClick={() => sendEmail()}>
             Email
           </button>
           <a href={pdf} download={`${startDateUnformatted}-TimeSheet.pdf`}>

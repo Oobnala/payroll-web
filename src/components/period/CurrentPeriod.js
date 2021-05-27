@@ -5,7 +5,7 @@ import {
   getDates,
   submit,
 } from '../../redux/actions/periodActions';
-import { getDataFromAWS } from '../../redux/actions/submitActions';
+import { getDataFromAWS, emailPDF } from '../../redux/actions/submitActions';
 import { getEmployees } from '../../redux/actions/employeeActions';
 import {
   KITCHEN_DAYS,
@@ -32,11 +32,14 @@ import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { formatDate } from './helpers';
 import { has } from 'lodash';
 
-let bucketName
+let bucketName;
 if (typeof process.env.REACT_APP_AWS_BUCKET_NAME === 'undefined') {
-  console.error("ENV VAR BUCKET NAME NOT SET", process.env.REACT_APP_AWS_BUCKET_NAME)
+  console.error(
+    'ENV VAR BUCKET NAME NOT SET',
+    process.env.REACT_APP_AWS_BUCKET_NAME
+  );
 } else {
-  bucketName = process.env.REACT_APP_AWS_BUCKET_NAME
+  bucketName = process.env.REACT_APP_AWS_BUCKET_NAME;
 }
 
 class CurrentPeriod extends Component {
@@ -291,7 +294,7 @@ class CurrentPeriod extends Component {
       bucketName,
       `${this.state.dates[this.state.periodIndex]}-TimeSheet.pdf`
     ).then((res) => {
-      console.log("res from aws", res)
+      console.log('res from aws', res);
       let blob = new Blob([res], { type: 'application/pdf' });
       let blobURL = URL.createObjectURL(blob);
       this.setState({
@@ -410,6 +413,7 @@ class CurrentPeriod extends Component {
             endDate={formatDate(
               this.getPeriodEnd(this.state.dates[this.state.periodIndex])
             )}
+            emailPDF={this.props.emailPDF}
             pdf={this.state.pdfURL}
             handleCloseModal={this.handleCloseModal}
           />
@@ -430,4 +434,5 @@ export default connect(mapStateToProps, {
   getDates,
   submit,
   getEmployees,
+  emailPDF,
 })(CurrentPeriod);
