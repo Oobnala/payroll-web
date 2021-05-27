@@ -15,7 +15,9 @@ pipeline {
         }
         stage("Deploy") {
             steps {
+                sh "sudo cp -r /var/www/jenkins-react-app/.env ~/"
                 sh "sudo rm -rf /var/www/jenkins-react-app"
+                sh "sudo cp -r ~/.env /var/www/jenkins-react-app/"
                 sh "sudo cp -r ${WORKSPACE}/build/ /var/www/jenkins-react-app/"
             }
         }
