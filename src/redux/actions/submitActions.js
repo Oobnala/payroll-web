@@ -2,16 +2,16 @@ var AWS = require('aws-sdk');
 
 let accessKeyId
 let secretAccessKey
-if (typeof process.env.AWS_ACCESS_KEY === 'undefined') {
+if (typeof process.env.REACT_APP_AWS_ACCESS_KEY === 'undefined') {
     console.error("UNABLE TO GET ENV VAR ACCESS KEY ID")
 } else {
-    accessKeyId = process.env.AWS_ACCESS_KEY
+    accessKeyId = process.env.REACT_APP_AWS_ACCESS_KEY
 }
 
-if (typeof process.env.AWS_SECRET_KEY === 'undefined') {
+if (typeof process.env.REACT_APP_AWS_SECRET_KEY === 'undefined') {
     console.error("UNABLE TO GET ENV VAR SECRET KEY")
 } else {
-    secretAccessKey = process.env.AWS_SECRET_KEY
+    secretAccessKey = process.env.REACT_APP_AWS_SECRET_KEY
 }
 
 AWS.config.update(
