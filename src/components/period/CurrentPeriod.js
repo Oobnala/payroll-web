@@ -34,7 +34,7 @@ import { has } from 'lodash';
 
 let bucketName
 if (typeof process.env.REACT_APP_AWS_BUCKET_NAME === 'undefined') {
-  console.error("ENV VAR BUCKET NAME NOT SET")
+  console.error("ENV VAR BUCKET NAME NOT SET", process.env.REACT_APP_AWS_BUCKET_NAME)
 } else {
   bucketName = process.env.REACT_APP_AWS_BUCKET_NAME
 }
