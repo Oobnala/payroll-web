@@ -38,6 +38,3 @@ export const getDataFromAWS = (bucketName, fileName) => new Promise((resolve,rej
           }
         );
 })
-
-
-// getDataFromAWS("chao-praya-time-sheets", "2021-05-01-TimeSheet.pdf")

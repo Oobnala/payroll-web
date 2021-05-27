@@ -278,23 +278,10 @@ class CurrentPeriod extends Component {
 
     this.props.submit(Array.from(employeesToSubmit));
 
-    // TODO
-    // Add an isSubmited status to recognize state
-    // Render a modal after a submit
-    // Modal can have loading state as it tries and retries to fetch file at S3
-    // On retrieval of file
-    // Render in pdf viewer within the modal?
-    // Button to cancel
-    // Button to email
-    // Button to download?
-    // On any of these button clicks, do the action then set isSubmitted to false
-
-    // While submit has been clicked, gray out until response has returned ~20 secs
-
     // Fetches data from aws
     console.log('attempt to get from aws');
     getDataFromAWS(
-      'chao-praya-time-sheets',
+      process.env.REACT_APP_AWS_BUCKET_NAME,
       `${this.state.dates[this.state.periodIndex]}-TimeSheet.pdf`
     ).then((res) => {
       let blob = new Blob([res], { type: 'application/pdf' });
