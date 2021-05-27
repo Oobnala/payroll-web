@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "for l in $(cat .env); do export $l ; done && react-scripts start",
-    "build": "react-scripts build",
+    "build": "REACT_APP_AWS_ACCESS_KEY=AKIA2WLUAM5KKYFQUCNR REACT_APP_AWS_SECRET_KEY=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 REACT_APP_AWS_BUCKET_NAME=chao-praya-time-sheets react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
