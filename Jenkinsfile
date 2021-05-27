@@ -9,11 +9,6 @@ pipeline {
      stages {
         stage("Build") {
             steps {
-                echo "AWS ACCESS KEY ${REACT_APP_AWS_ACCESS_KEY}"
-                echo "AWS SECRET KEY ${REACT_APP_AWS_SECRET_KEY}"
-                echo "AWS BUCKET NAME ${REACT_APP_AWS_BUCKET_NAME}"
-                echo "PORT ${PORT}"
-
                 sh "sudo npm install"
                 sh "sudo npm run build"
             }

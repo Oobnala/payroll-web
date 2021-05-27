@@ -33,10 +33,10 @@ import { formatDate } from './helpers';
 import { has } from 'lodash';
 
 let bucketName
-if (typeof process.env.REACT_APP_AWS_BUCKET_NAME === 'undefined') {
+if (typeof process.env.AWS_BUCKET_NAME === 'undefined') {
   console.error("ENV VAR BUCKET NAME NOT SET")
 } else {
-  bucketName = process.env.REACT_APP_AWS_BUCKET_NAME
+  bucketName = process.env.AWS_BUCKET_NAME
 }
 
 class CurrentPeriod extends Component {
