@@ -32,6 +32,14 @@ import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { formatDate } from './helpers';
 import { has } from 'lodash';
 
+let bucketName = ''
+if (typeof process.env.REACT_APP_AWS_BUCKET_NAME === 'undefined') {
+  console.error("ENV VAR BUCKET NAME NOT SET")
+} else {
+  bucketName = process.env.REACT_APP_AWS_BUCKET_NAME
+  console.log("bucket name", bucketName)
+}
+
 class CurrentPeriod extends Component {
   constructor(props) {
     super(props);
@@ -281,7 +289,7 @@ class CurrentPeriod extends Component {
     // Fetches data from aws
     console.log('attempt to get from aws');
     getDataFromAWS(
-      process.env.REACT_APP_AWS_BUCKET_NAME,
+      bucketName,
       `${this.state.dates[this.state.periodIndex]}-TimeSheet.pdf`
     ).then((res) => {
       let blob = new Blob([res], { type: 'application/pdf' });
