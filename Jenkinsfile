@@ -15,7 +15,7 @@ pipeline {
                 echo "PORT ${PORT}"
 
                 sh "sudo npm install"
-                sh 'sudo REACT_APP_AWS_ACCESS_KEY=${REACT_APP_AWS_ACCESS_KEY} npm run build'
+                sh "sudo npm run build"
             }
         }
         stage("Deploy") {
