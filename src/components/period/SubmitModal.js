@@ -13,7 +13,7 @@ const SubmitModal = ({
 
   const sendEmail = () => {
     emailPDF(startDateUnformatted);
-    handleCloseModal();
+    alert('Pay period email sent.');
   };
 
   useEffect(() => {
@@ -47,9 +47,7 @@ const SubmitModal = ({
             Email
           </button>
           <a href={pdf} download={`${startDateUnformatted}-TimeSheet.pdf`}>
-            <button className="modal__btn" onClick={handleCloseModal}>
-              Download
-            </button>
+            <button className="modal__btn">Download</button>
           </a>
         </div>
       </div>
