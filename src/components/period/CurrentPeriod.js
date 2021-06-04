@@ -28,6 +28,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PeriodRow from './PeriodRows';
 import Calculator from './Calculator';
 import SubmitModal from './SubmitModal';
+import LoadingModal from './LoadingModal';
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { formatDate } from './helpers';
 import { has } from 'lodash';
@@ -52,6 +53,7 @@ class CurrentPeriod extends Component {
       dates: [],
       yearlyDates: [],
       isCurrent: true,
+      submitLoading: false,
       isSubmitted: false,
       pdfURL: '',
     };
@@ -248,6 +250,10 @@ class CurrentPeriod extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
+    this.setState({
+      submitLoading: true,
+    });
+
     const { employees } = this.state;
     const previousDate = this.state.dates[this.state.periodIndex - 1];
     const previousEmployees =
@@ -300,6 +306,7 @@ class CurrentPeriod extends Component {
       this.setState({
         pdfURL: blobURL,
         isSubmitted: true,
+        submitLoading: false,
       });
     });
   }
@@ -406,6 +413,7 @@ class CurrentPeriod extends Component {
           )}
         </div>
         <Calculator />
+        {this.state.submitLoading && <LoadingModal />}
         {this.state.isSubmitted && (
           <SubmitModal
             startDateUnformatted={this.state.dates[this.state.periodIndex]}
