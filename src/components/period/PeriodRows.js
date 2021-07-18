@@ -241,6 +241,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           className="period__tinput"
           type="text"
           pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
+          inputmode="numeric"
           value={currentEmployee.misc !== null ? currentEmployee.misc : '00:00'}
           name={MISC}
           onChange={handleOnChange}
