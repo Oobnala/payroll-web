@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHistory } from '@fortawesome/free-solid-svg-icons';
+import { faHistory, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 import {
   KITCHEN_DAYS,
   CALCULATED_KITCHEN_HOURS,
@@ -240,7 +240,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="text"
-          pattern="\d*"
+          pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
           value={currentEmployee.misc !== null ? currentEmployee.misc : '00:00'}
           name={MISC}
           onChange={handleOnChange}
@@ -256,7 +256,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="text"
-          pattern="\d*"
+          pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
           value={
             currentEmployee.serverHours !== null
               ? currentEmployee.serverHours
@@ -271,7 +271,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="text"
-          pattern="\d*"
+          pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
           value={
             currentEmployee.sickHours !== null
               ? currentEmployee.sickHours
@@ -304,7 +304,14 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           disabled={!isCurrent}
         />
       </td>
-      
+      <td>
+        {/*
+             On click here this button will keep state of if it is locked or not 
+        */}
+        <button className="period__history">
+          <FontAwesomeIcon icon={faLockOpen} />
+        </button>
+      </td>
       <td>
         <Link
           to={{

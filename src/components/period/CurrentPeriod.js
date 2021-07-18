@@ -329,6 +329,7 @@ class CurrentPeriod extends Component {
       'Total',
       'Total Hours Rounded',
       'Tips',
+      'Lock Status',
       'History',
     ];
     return (
