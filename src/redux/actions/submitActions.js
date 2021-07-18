@@ -40,14 +40,14 @@ export const getDataFromAWS = (bucketName, fileName) =>
       if (error != null) {
         if (error.code === 'NoSuchKey') {
           console.log(
-            'File does not exist yet, retrying in 3 seconds',
+            'File does not exist yet, retrying in 5 seconds',
             retryCounter
           );
           retryCounter += 1;
-          if (retryCounter <= 5) {
+          if (retryCounter <= 10) {
             setTimeout(function () {
               getDataFromAWS();
-            }, 3000);
+            }, 5000);
           } else {
             console.error(
               'Unable to retrieve file within the expected time limit'

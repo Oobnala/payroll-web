@@ -149,11 +149,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
       }
 
       case TIPS: {
-        let tip = parseFloat(value).toFixed(2);
-        if (isNaN(tip)) {
-          tip = 0;
-        }
-        setEmployeeValue(TIPS, tip);
+        setEmployeeValue(TIPS, value);
         break;
       }
     }
@@ -185,6 +181,8 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="number"
+          step="0.01"
+          pattern="\d*"
           value={
             currentEmployee.kitchenDays !== null
               ? currentEmployee.kitchenDays
@@ -208,6 +206,8 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="number"
+          step="0.01"
+          pattern="\d*"
           value={
             currentEmployee.cashPercentage !== null
               ? currentEmployee.cashPercentage
@@ -240,6 +240,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="text"
+          pattern="\d*"
           value={currentEmployee.misc !== null ? currentEmployee.misc : '00:00'}
           name={MISC}
           onChange={handleOnChange}
@@ -255,6 +256,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="text"
+          pattern="\d*"
           value={
             currentEmployee.serverHours !== null
               ? currentEmployee.serverHours
@@ -269,6 +271,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="text"
+          pattern="\d*"
           value={
             currentEmployee.sickHours !== null
               ? currentEmployee.sickHours
@@ -293,12 +296,15 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="number"
+          step="0.01"
+          pattern="\d*"
           value={currentEmployee.tips !== null ? currentEmployee.tips : 0}
           name={TIPS}
           onChange={handleOnChange}
           disabled={!isCurrent}
         />
       </td>
+      
       <td>
         <Link
           to={{

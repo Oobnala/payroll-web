@@ -31,7 +31,7 @@ import SubmitModal from './SubmitModal';
 import LoadingModal from './LoadingModal';
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { formatDate } from './helpers';
-import { has } from 'lodash';
+import { has, sortBy } from 'lodash';
 
 let bucketName;
 if (typeof process.env.REACT_APP_AWS_BUCKET_NAME === 'undefined') {
@@ -344,12 +344,24 @@ class CurrentPeriod extends Component {
     );
   }
 
+  sortByFirstName(a, b) {
+    const nameA = a.firstName.toUpperCase(); // ignore upper and lowercase
+    const nameB = b.firstName.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  }
+
   renderTableRows() {
     let employees = this.state.employees;
     if (employees.length > 0) {
       return (
         <tbody>
-          {employees.map((employee, index) => (
+          {employees.sort(this.sortByFirstName).map((employee, index) => (
             <PeriodRow
               key={index}
               employee={employee}
