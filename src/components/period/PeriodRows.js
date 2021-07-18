@@ -182,7 +182,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           className="period__tinput"
           type="number"
           step="0.01"
-          pattern="\d*"
+          inputMode="decimal"
           value={
             currentEmployee.kitchenDays !== null
               ? currentEmployee.kitchenDays
@@ -207,7 +207,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           className="period__tinput"
           type="number"
           step="0.01"
-          pattern="\d*"
+          inputMode="decimal"
           value={
             currentEmployee.cashPercentage !== null
               ? currentEmployee.cashPercentage
@@ -294,7 +294,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           className="period__tinput"
           type="number"
           step="0.01"
-          pattern="\d*"
+          inputMode="decimal"
           value={currentEmployee.tips !== null ? currentEmployee.tips : 0}
           name={TIPS}
           onChange={handleOnChange}
