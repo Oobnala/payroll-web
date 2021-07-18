@@ -240,8 +240,6 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="text"
-          pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
-          inputMode="numeric"
           value={currentEmployee.misc !== null ? currentEmployee.misc : '00:00'}
           name={MISC}
           onChange={handleOnChange}
@@ -257,7 +255,6 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="text"
-          pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
           value={
             currentEmployee.serverHours !== null
               ? currentEmployee.serverHours
@@ -272,7 +269,6 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
         <input
           className="period__tinput"
           type="text"
-          pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
           value={
             currentEmployee.sickHours !== null
               ? currentEmployee.sickHours
