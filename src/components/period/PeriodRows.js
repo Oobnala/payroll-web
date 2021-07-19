@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHistory, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
+import { faCommentDollar, faHistory, faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons';
 import {
   KITCHEN_DAYS,
   CALCULATED_KITCHEN_HOURS,
@@ -25,17 +25,20 @@ import {
   addTimes,
   roundToNearestQuarter,
 } from './calculations';
+import { compose } from 'redux';
 
-const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
+const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent, lock, unlock, lockedEmployees }) => {
   // Makes copy of employee object and sets to local state via hooks.
   // Can alter currentEmployee data then pass to CurrentPeriod.js
   // to update actual employees state when handleOnChange is done
 
   const [currentEmployee, setEmployee] = useState({ ...employee });
+  const [lockedEmployeesArr, setLockedEmployees] = useState([]);
 
   useEffect(() => {
     setEmployee(employee);
-  }, [employee]);
+    setLockedEmployees(lockedEmployees)
+  }, [employee, lockedEmployees]);
 
   const handleOnChange = (e) => {
     let value = e.target.value;
@@ -171,8 +174,21 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
     }
   };
 
+  const handleLockChange = (employee, lock, unlock) => {
+    if (!isLocked()) {
+      setLockedEmployees([ currentEmployee.id, ...lockedEmployeesArr ])
+      lock(Array.of(currentEmployee))
+    } else {
+      setLockedEmployees(lockedEmployeesArr.filter(eid => eid !== currentEmployee.id))
+      unlock(currentEmployee.id, currentEmployee.periodStart)
+    }
+  }
+
+  const isLocked = () => lockedEmployeesArr.find(id => id === currentEmployee.id)
+
   return (
-    <tr key={index} className="period__trow">
+    
+    <tr key={index} bgcolor={(isLocked()) ? "464646" : ""} className="period__trow">
       <td>{currentEmployee.firstName}</td>
       <td>{currentEmployee.lastName}</td>
       <td>{'$' + currentEmployee.hourlyRate}</td>
@@ -190,7 +206,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           }
           name={KITCHEN_DAYS}
           onChange={handleOnChange}
-          disabled={!isCurrent}
+          disabled={!isCurrent || isLocked()}
         />
       </td>
       <td>
@@ -215,7 +231,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           }
           name={CASH_PERCENTAGE}
           onChange={handleOnChange}
-          disabled={!isCurrent}
+          disabled={!isCurrent || isLocked()}
         />
       </td>
       <td>
@@ -243,7 +259,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           value={currentEmployee.misc !== null ? currentEmployee.misc : '00:00'}
           name={MISC}
           onChange={handleOnChange}
-          disabled={!isCurrent}
+          disabled={!isCurrent || isLocked()}
         />
       </td>
       <td>
@@ -262,7 +278,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           }
           name={SERVER_HOURS}
           onChange={handleOnChange}
-          disabled={!isCurrent}
+          disabled={!isCurrent || isLocked()}
         />
       </td>
       <td>
@@ -276,7 +292,7 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           }
           name={SICK_HOURS}
           onChange={handleOnChange}
-          disabled={!isCurrent}
+          disabled={!isCurrent || isLocked()}
         />
       </td>
       <td>
@@ -298,15 +314,17 @@ const PeriodRows = ({ employee, index, handleUpdateEmployee, isCurrent }) => {
           value={currentEmployee.tips !== null ? currentEmployee.tips : 0}
           name={TIPS}
           onChange={handleOnChange}
-          disabled={!isCurrent}
+          disabled={!isCurrent || isLocked()}
         />
       </td>
       <td>
-        {/*
-             On click here this button will keep state of if it is locked or not 
-        */}
-        <button className="period__history">
-          <FontAwesomeIcon icon={faLockOpen} />
+        <button 
+          className="period__history" 
+          type="button" 
+          onClick={() => handleLockChange(currentEmployee, lock, unlock)}
+        >
+            <FontAwesomeIcon icon={isLocked()
+               ? faLock : faLockOpen} />
         </button>
       </td>
       <td>

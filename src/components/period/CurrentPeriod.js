@@ -4,6 +4,8 @@ import {
   getPayPeriods,
   getDates,
   submit,
+  lock,
+  unlock
 } from '../../redux/actions/periodActions';
 import { getDataFromAWS, emailPDF } from '../../redux/actions/submitActions';
 import { getEmployees } from '../../redux/actions/employeeActions';
@@ -31,7 +33,7 @@ import SubmitModal from './SubmitModal';
 import LoadingModal from './LoadingModal';
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 import { formatDate } from './helpers';
-import { has, sortBy } from 'lodash';
+import { has } from 'lodash';
 
 let bucketName;
 if (typeof process.env.REACT_APP_AWS_BUCKET_NAME === 'undefined') {
@@ -56,6 +58,7 @@ class CurrentPeriod extends Component {
       submitLoading: false,
       isSubmitted: false,
       pdfURL: '',
+      lockedEmployees: [],
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -98,13 +101,53 @@ class CurrentPeriod extends Component {
             this.generateTemplate(employees);
           });
         } else {
-          this.setState({
-            employees: this.props.periods[this.props.dates[length]],
+          // Employees with data, fetched from db
+          const dbEmployees = this.props.periods[this.props.dates[length]]
+          this.props.getEmployees().then((employees) => {
+            // Merge in employee blanks, then set state to merged array
+            this.setState({
+              employees: this.mergeEmployeeBlanks(employees, dbEmployees),
+              lockedEmployees: dbEmployees.map(employee => employee.id)
+            });
           });
         }
       });
     });
   }
+
+  mergeEmployeeBlanks(employees, dbEmployees) {
+    // Build entire array of blank employees
+      let emptyEmployees = employees.map((employee) => {
+        let { addedAt, modifiedAt, ...newEmployee } = employee;
+        newEmployee[KITCHEN_DAYS] = 0;
+        newEmployee[CALCULATED_KITCHEN_HOURS] = '00:00';
+        newEmployee[SERVER_HOURS] = '00:00';
+        newEmployee[SICK_HOURS] = '00:00';
+        newEmployee[TOTAL_HOURS] = '00:00';
+        newEmployee[TOTAL_HOURS_ROUNDED] = '00:00';
+        newEmployee[TIPS] = 0;
+        newEmployee[PERIOD_START] = dbEmployees[0].periodStart;
+        newEmployee[PERIOD_END] = dbEmployees[0].periodEnd;
+        newEmployee[CHECK_DATE] = dbEmployees[0].checkDate;
+        newEmployee[TOTAL_PAY_NEEDED] = 0;
+        newEmployee[CASH_PERCENTAGE] = 0;
+        newEmployee[CASH_PAYOUT] = 0;
+        newEmployee[CHECK_PAYOUT] = 0;
+        newEmployee[MISC] = '00:00';
+
+        return newEmployee;
+      });
+
+      // Merge two arrays together to have both empty and non empty
+      let mergedEmployees = emptyEmployees.map(blankEmployee => {
+        return Object.assign(blankEmployee, dbEmployees.find(dbEmployee => {
+          return dbEmployee && blankEmployee.id === dbEmployee.id
+        }))
+      })
+
+      return mergedEmployees;
+    }
+  
 
   generateTemplate(employees) {
     let dates = this.state.dates;
@@ -155,7 +198,7 @@ class CurrentPeriod extends Component {
       periodIndex: this.state.periodIndex + 1,
       dates: dates,
       employees: newEmployees,
-      isCurrent: true,
+      isCurrent: true
     });
   }
 
@@ -204,18 +247,23 @@ class CurrentPeriod extends Component {
         periodIndex: index,
         employees: this.state.periods[period],
         isCurrent: false,
+        lockedEmployees: this.state.periods[period].map(employee => employee.id)
       });
     }
   }
 
   setNextPeriod() {
     if (this.state.periodIndex < this.state.dates.length - 1) {
-      let index = this.state.periodIndex + 1;
-      let period = this.state.dates[index];
+      let nextIndex = this.state.periodIndex + 1;
+      let prevIndex = this.state.periodIndex;
+      let period = this.state.dates[nextIndex];
+      let prevPeriod = this.state.dates[prevIndex];
+
       this.setState(
         {
-          periodIndex: index,
-          employees: this.state.periods[period],
+          periodIndex: nextIndex,
+          employees: this.mergeEmployeeBlanks(this.state.periods[prevPeriod], this.state.periods[period]),
+          lockedEmployees: this.state.periods[period].map(employee => employee.id)
         },
         () => {
           if (this.state.periodIndex === this.state.dates.length - 1) {
@@ -263,6 +311,8 @@ class CurrentPeriod extends Component {
 
     // Create a copy of employees as a Set, we dont want any dups!
     let employeesToSubmit = new Set([...employees]);
+
+    console.log("emp", employeesToSubmit)
 
     // Set default values that all employees are not new and not removed
     employeesToSubmit.forEach((employee) => {
@@ -368,7 +418,10 @@ class CurrentPeriod extends Component {
               employee={employee}
               index={index}
               handleUpdateEmployee={this.handleUpdateEmployee}
+              lock={this.props.lock}
+              unlock={this.props.unlock}
               isCurrent={this.state.isCurrent}
+              lockedEmployees={this.state.lockedEmployees}
             />
           ))}
         </tbody>
@@ -456,4 +509,6 @@ export default connect(mapStateToProps, {
   submit,
   getEmployees,
   emailPDF,
+  lock,
+  unlock,
 })(CurrentPeriod);
