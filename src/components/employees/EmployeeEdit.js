@@ -74,6 +74,9 @@ const EmployeeEdit = ({
         <h2>Hourly Rate</h2>
         <input
           className="employee__input"
+          type="number"
+          step="0.01"
+          inputMode="decimal"
           value={hourlyRate}
           placeholder="Hourly Rate"
           onChange={handleHourlyRateChange}
@@ -83,6 +86,9 @@ const EmployeeEdit = ({
         <h2>Kitchen Rate</h2>
         <input
           className="employee__input"
+          type="number"
+          step="0.01"
+          inputMode="decimal"
           value={kitchenDayRate !== 0 ? kitchenDayRate : 0}
           placeholder="Kitchen Rate"
           onChange={handleKitchenRateChange}

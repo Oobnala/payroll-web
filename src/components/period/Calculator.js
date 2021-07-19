@@ -90,6 +90,8 @@ const Calculator = () => {
           <input
             className="calculator__cinput"
             type="number"
+            step="0.01"
+            inputMode="decimal"
             value={hourlyRate}
             name={HOURLY_RATE}
             onChange={handleOnChange}
@@ -103,6 +105,8 @@ const Calculator = () => {
           <input
             className="calculator__cinput"
             type="number"
+            step="0.01"
+            inputMode="decimal"
             value={totalPayNeeded}
             name={TOTAL_PAY_NEEDED}
             onChange={handleOnChange}
@@ -124,6 +128,8 @@ const Calculator = () => {
         <input
           className="calculator__cinput"
           type="number"
+          step="0.01"
+          inputMode="decimal"
           value={cashPercentage}
           name={CASH_PERCENTAGE}
           onChange={handleOnChange}
