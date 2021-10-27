@@ -1,1 +1,1 @@
-Frontend for Chao Praya Restaurant Payroll web app.
+Frontend for Restaurant Payroll web app.
